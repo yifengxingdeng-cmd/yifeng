@@ -1563,14 +1563,16 @@ function openLine() {
       const editUrl = window.location.origin + window.location.pathname + '?edit=' + orderId;
       msg += '📝 點此修改訂單：\n' + editUrl + '\n';
     }
-    // 傳送後清空購物車
-    cart = {};
-    editingOrderId = '';
-    renderProducts();
-    updatePanel();
-    closeModal('orderModal');
     window.location.href = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
-    setTimeout(releaseLock, 3000);
+    // 跳轉 LINE 後清空購物車（500ms 後執行，確保導向已觸發）
+    setTimeout(() => {
+      cart = {};
+      editingOrderId = '';
+      renderProducts();
+      updatePanel();
+      closeModal('orderModal');
+      releaseLock();
+    }, 500);
   });
 }
 
