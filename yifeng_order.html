@@ -964,12 +964,7 @@ const PRODUCTS = {
 // ══════════════════════════════════════════════════════════════
 
 // ★ 部署好新的 Apps Script 後，把網址貼在這裡
-let V2_GAS_URL = '';
-try { V2_GAS_URL = localStorage.getItem('yf_gas_url') || ''; } catch(e) {}
-if (!V2_GAS_URL) {
-  V2_GAS_URL = prompt('請輸入義豐行 GAS 網址：') || '';
-  if (V2_GAS_URL) { try { localStorage.setItem('yf_gas_url', V2_GAS_URL); } catch(e) {} }
-}
+const V2_GAS_URL = 'https://script.google.com/macros/s/AKfycbz3lQIEATx7e4Cbcw0gC6o3dbCBnIpMf9Bt5U5eXEHCZzjLbBRITKnpw2veMwuepdfq3w/exec';
 const FRONTEND_VERSION = 'v1.0-義豐行-2026-09-03';
 
 const LS_CART     = 'yifeng_cart';
@@ -1568,6 +1563,12 @@ function openLine() {
       const editUrl = window.location.origin + window.location.pathname + '?edit=' + orderId;
       msg += '📝 點此修改訂單：\n' + editUrl + '\n';
     }
+    // 傳送後清空購物車
+    cart = {};
+    editingOrderId = '';
+    renderProducts();
+    updatePanel();
+    closeModal('orderModal');
     window.location.href = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
     setTimeout(releaseLock, 3000);
   });
