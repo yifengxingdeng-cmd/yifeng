@@ -15,6 +15,7 @@
   .toolbar { display:flex; gap:8px; align-items:center; margin-bottom:14px; }
   .toolbar input[type=date] { flex:1; border:1.5px solid #86efac; border-radius:8px; padding:8px; font-size:14px; }
   .toolbar button { background:#15803d; color:white; border:none; border-radius:8px; padding:8px 14px; font-size:14px; cursor:pointer; }
+  /* dropdown menu */
   .toolbar-menu-wrap { position:relative; flex-shrink:0; }
   .toolbar-menu-btn { background:#15803d; color:white; border:none; border-radius:8px; padding:8px 14px; font-size:20px; cursor:pointer; line-height:1; display:flex; align-items:center; gap:4px; }
   .toolbar-dropdown { display:none; position:absolute; top:calc(100% + 6px); right:0; background:white; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.18); min-width:180px; z-index:100; overflow:hidden; }
@@ -46,6 +47,7 @@
   .summary-card { flex:1; background:white; border-radius:10px; padding:12px 16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); text-align:center; }
   .summary-card .num { font-size:28px; font-weight:700; color:#15803d; }
   .summary-card .label { font-size:12px; color:#888; margin-top:2px; }
+  /* 品項統計 modal */
   .stats-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; }
   .stats-overlay.open { display:flex; }
   .stats-box { background:white; border-radius:16px; width:92%; max-width:520px; max-height:85vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.18); }
@@ -60,6 +62,7 @@
   .stats-table td:last-child { text-align:right; font-weight:700; color:#15803d; }
   .stats-table tr:last-child td { border-bottom:none; }
   .stats-table tr:hover td { background:#f0fdf4; }
+  /* 列印 modal */
   .print-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:300; align-items:center; justify-content:center; }
   .print-overlay.open { display:flex; }
   .print-box { background:white; border-radius:16px; width:96%; max-width:540px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
@@ -74,8 +77,11 @@
   .print-table td:first-child { text-align:left; }
   .print-table input[type=number] { width:70px; border:1.5px solid #86efac; border-radius:6px; padding:4px 6px; font-size:13px; text-align:right; }
   .print-total { text-align:right; font-size:16px; font-weight:700; color:#15803d; padding:8px 4px; border-top:2px solid #15803d; margin-top:4px; }
-  .print-preview { display:block; width:100%; margin-top:12px; padding:10px; background:#dcfce7; color:#15803d; border:1.5px solid #86efac; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; }
+  .print-preview { display:block; width:100%; margin-top:12px; padding:10px; background:#e0f2fe; color:#0369a1; border:1.5px solid #7dd3fc; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; }
+  .print-preview:active { background:#bae6fd; }
   .print-send { display:block; width:100%; margin-top:8px; padding:12px; background:#15803d; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; }
+  .print-send:active { background:#14532d; }
+  /* 預覽 Modal */
   .preview-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:9000; display:flex; align-items:flex-start; justify-content:center; overflow-y:auto; padding:20px; }
   .preview-box { background:white; border-radius:14px; padding:18px; width:100%; max-width:440px; margin:auto; }
   .preview-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
@@ -86,6 +92,7 @@
   .preview-stat { text-align:center; font-size:12px; color:#555; margin-bottom:14px; }
   .bridge-url-row { display:flex; gap:6px; margin-bottom:10px; align-items:center; font-size:12px; color:#555; }
   .bridge-url-row input { flex:1; border:1.5px solid #ddd; border-radius:6px; padding:5px 8px; font-size:12px; }
+  /* 修改密碼 modal */
   .pwd-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:400; align-items:center; justify-content:center; }
   .pwd-overlay.open { display:flex; }
   .pwd-box { background:white; border-radius:16px; width:90%; max-width:360px; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
@@ -99,6 +106,7 @@
   .pwd-body input:focus { outline:none; border-color:#15803d; }
   .pwd-submit { display:block; width:100%; margin-top:18px; padding:12px; background:#15803d; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; }
   .pwd-msg { margin-top:10px; font-size:13px; text-align:center; }
+  /* 刪除當天 modal */
   .delday-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:400; align-items:center; justify-content:center; }
   .delday-overlay.open { display:flex; }
   .delday-box { background:white; border-radius:16px; width:90%; max-width:360px; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
@@ -112,6 +120,7 @@
   .delday-body input:focus { outline:none; border-color:#c0392b; }
   .delday-submit { display:block; width:100%; margin-top:16px; padding:12px; background:#c0392b; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; }
   .delday-msg { margin-top:10px; font-size:13px; text-align:center; }
+  /* 訂單總覽 modal */
   .overview-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:400; align-items:center; justify-content:center; }
   .overview-overlay.open { display:flex; }
   .overview-box { background:white; border-radius:16px; width:92%; max-width:480px; max-height:85vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
@@ -129,10 +138,11 @@
   .overview-table .tag-active { color:#15803d; font-weight:700; }
   .overview-table .tag-cancelled { color:#c0392b; }
   .overview-loading { text-align:center; padding:30px; color:#888; font-size:14px; }
+  /* 批價 modal */
   .price-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:500; align-items:center; justify-content:center; }
   .price-overlay.open { display:flex; }
   .price-box { background:white; border-radius:16px; width:92%; max-width:420px; max-height:88vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.22); }
-  .price-header { background:#15803d; color:white; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+  .price-header { background:#0d6efd; color:white; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
   .price-header h2 { margin:0; font-size:16px; }
   .price-close { background:none; border:none; color:white; font-size:22px; cursor:pointer; padding:0 4px; }
   .price-body { overflow-y:auto; padding:16px; }
@@ -141,31 +151,23 @@
   .price-name { flex:1; font-size:14px; font-weight:600; }
   .price-qty { font-size:13px; color:#888; white-space:nowrap; }
   .price-input { width:90px; border:1.5px solid #86efac; border-radius:8px; padding:8px 10px; font-size:15px; text-align:right; }
-  .price-input:focus { outline:none; border-color:#15803d; }
-  .price-confirm { display:block; width:100%; margin-top:16px; padding:12px; background:#15803d; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; flex-shrink:0; }
+  .price-input:focus { outline:none; border-color:#0d6efd; }
+  .price-confirm { display:block; width:100%; margin-top:16px; padding:12px; background:#0d6efd; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; flex-shrink:0; }
   .price-info { background:#f0fdf4; border-radius:8px; padding:8px 12px; font-size:13px; color:#15803d; margin-bottom:12px; }
-  .setup-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:600; align-items:center; justify-content:center; }
-  .setup-overlay.open { display:flex; }
-  .setup-box { background:white; border-radius:16px; width:92%; max-width:480px; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.25); }
-  .setup-header { background:#15803d; color:white; padding:14px 18px; }
-  .setup-header h2 { margin:0; font-size:16px; }
-  .setup-body { padding:20px; }
-  .setup-body p { font-size:13px; color:#555; line-height:1.7; margin:0 0 14px; }
-  .setup-body input { width:100%; box-sizing:border-box; border:1.5px solid #86efac; border-radius:8px; padding:10px; font-size:13px; }
-  .setup-body input:focus { outline:none; border-color:#15803d; }
-  .setup-submit { display:block; width:100%; margin-top:14px; padding:12px; background:#15803d; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; }
-  .setup-msg { margin-top:8px; font-size:13px; text-align:center; color:#c0392b; }
 </style>
 </head>
 <body>
 
-<div class="top"><h1>🥬 義豐行 — 訂單儀表板</h1></div>
+<div class="top"><h1>📦 義豐行 — 訂單儀表板</h1></div>
 <div class="container" id="app"></div>
 
 <!-- 品項統計 Modal -->
 <div class="stats-overlay" id="statsOverlay" onclick="if(event.target===this)closeStats()">
   <div class="stats-box">
-    <div class="stats-header"><h2>📊 品項統計</h2><button class="stats-close" onclick="closeStats()">×</button></div>
+    <div class="stats-header">
+      <h2>📊 品項統計</h2>
+      <button class="stats-close" onclick="closeStats()">×</button>
+    </div>
     <div class="stats-body" id="statsBody"></div>
   </div>
 </div>
@@ -173,7 +175,10 @@
 <!-- 批價 Modal -->
 <div class="price-overlay" id="priceOverlay" onclick="if(event.target===this)closeBatchPrice()">
   <div class="price-box">
-    <div class="price-header"><h2>💰 批價</h2><button class="price-close" onclick="closeBatchPrice()">×</button></div>
+    <div class="price-header">
+      <h2>💰 批價</h2>
+      <button class="price-close" onclick="closeBatchPrice()">×</button>
+    </div>
     <div class="price-body">
       <div class="price-info" id="priceInfo"></div>
       <div id="priceRows"></div>
@@ -185,15 +190,23 @@
 <!-- 訂單總覽 Modal -->
 <div class="overview-overlay" id="overviewOverlay" onclick="if(event.target===this)closeOverview()">
   <div class="overview-box">
-    <div class="overview-header"><h2>📅 各日訂單總覽</h2><button class="overview-close" onclick="closeOverview()">×</button></div>
-    <div class="overview-body" id="overviewBody"><div class="overview-loading">載入中…</div></div>
+    <div class="overview-header">
+      <h2>📅 各日訂單總覽</h2>
+      <button class="overview-close" onclick="closeOverview()">×</button>
+    </div>
+    <div class="overview-body" id="overviewBody">
+      <div class="overview-loading">載入中…</div>
+    </div>
   </div>
 </div>
 
 <!-- 刪除當天全部 Modal -->
 <div class="delday-overlay" id="deldayOverlay" onclick="if(event.target===this)closeDeleteDay()">
   <div class="delday-box">
-    <div class="delday-header"><h2>🗑️ 刪除當天全部訂單</h2><button class="delday-close" onclick="closeDeleteDay()">×</button></div>
+    <div class="delday-header">
+      <h2>🗑️ 刪除當天全部訂單</h2>
+      <button class="delday-close" onclick="closeDeleteDay()">×</button>
+    </div>
     <div class="delday-body">
       <label style="margin-bottom:4px;">選擇要刪除的日期</label>
       <input type="date" id="deldayDate" style="width:100%;box-sizing:border-box;border:1.5px solid #fca5a5;border-radius:8px;padding:10px;font-size:15px;margin-bottom:14px;" oninput="updateDeldayWarning()" />
@@ -209,11 +222,17 @@
 <!-- 修改密碼 Modal -->
 <div class="pwd-overlay" id="pwdOverlay" onclick="if(event.target===this)closeChangePwd()">
   <div class="pwd-box">
-    <div class="pwd-header"><h2>🔑 修改密碼</h2><button class="pwd-close" onclick="closeChangePwd()">×</button></div>
+    <div class="pwd-header">
+      <h2>🔑 修改密碼</h2>
+      <button class="pwd-close" onclick="closeChangePwd()">×</button>
+    </div>
     <div class="pwd-body">
-      <label>目前密碼</label><input type="password" id="pwdOld" placeholder="輸入目前密碼" maxlength="20" />
-      <label>新密碼</label><input type="password" id="pwdNew" placeholder="輸入新密碼" maxlength="20" />
-      <label>確認新密碼</label><input type="password" id="pwdConfirm" placeholder="再輸入一次新密碼" maxlength="20" />
+      <label>目前密碼</label>
+      <input type="password" id="pwdOld" placeholder="輸入目前密碼" maxlength="20" />
+      <label>新密碼</label>
+      <input type="password" id="pwdNew" placeholder="輸入新密碼" maxlength="20" />
+      <label>確認新密碼</label>
+      <input type="password" id="pwdConfirm" placeholder="再輸入一次新密碼" maxlength="20" />
       <button class="pwd-submit" onclick="submitChangePwd()">確認修改</button>
       <div class="pwd-msg" id="pwdMsg"></div>
     </div>
@@ -223,7 +242,10 @@
 <!-- 列印 Modal -->
 <div class="print-overlay" id="printOverlay" onclick="if(event.target===this)closePrint()">
   <div class="print-box">
-    <div class="print-header"><h2>🖨️ 列印送貨單</h2><button class="print-close" onclick="closePrint()">×</button></div>
+    <div class="print-header">
+      <h2>🖨️ 列印送貨單</h2>
+      <button class="print-close" onclick="closePrint()">×</button>
+    </div>
     <div class="print-body">
       <div class="bridge-url-row">
         <span>橋接器：</span>
@@ -239,61 +261,24 @@
         <span>經手人：</span>
         <input type="text" id="printHandler" placeholder="（選填）" style="flex:1;border:1.5px solid #ddd;border-radius:6px;padding:5px 8px;font-size:13px;" />
       </div>
-      <button class="print-preview" onclick="showReceiptPreview()">👁 螢幕預覽（不列印）</button>
       <button class="print-send" onclick="sendPrint()">📤 送出列印</button>
     </div>
   </div>
 </div>
 
-<!-- GAS URL 設定 Modal（首次使用） -->
-<div class="setup-overlay" id="setupOverlay">
-  <div class="setup-box">
-    <div class="setup-header"><h2>⚙️ 初次設定</h2></div>
-    <div class="setup-body">
-      <p>請貼上部署好的 Google Apps Script 網址。此網址會記憶在本裝置，之後不需再輸入。</p>
-      <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/..." />
-      <button class="setup-submit" onclick="saveGasUrl()">儲存並繼續</button>
-      <div class="setup-msg" id="setupMsg"></div>
-    </div>
-  </div>
-</div>
-
 <script>
-const FRONTEND_VERSION = 'v2.1-義豐行-2026-09-16';
+// ★ 部署好新的 Apps Script 後，把網址貼在這裡（跟 order.html 用同一個）
+const V2_GAS_URL = 'https://script.google.com/macros/s/AKfycbz3lQIEATx7e4Cbcw0gC6o3dbCBnIpMf9Bt5U5eXEHCZzjLbBRITKnpw2veMwuepdfq3w/exec';
+const FRONTEND_VERSION = 'v2.17-義豐行-2026-09-11';
 
-// ── GAS URL（存 localStorage，首次使用時設定）──
-let V2_GAS_URL = '';
-try { V2_GAS_URL = localStorage.getItem('yf_gas_url') || ''; } catch(e) {}
+fetch(V2_GAS_URL + '?action=ping').then(r=>r.json()).then(d=>{
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;bottom:4px;right:6px;font-size:10px;color:#bbb;z-index:99999;';
+  el.textContent = '前端 ' + FRONTEND_VERSION + ' ／ 後端 ' + (d.version||'未知');
+  document.body.appendChild(el);
+}).catch(()=>{});
 
-function saveGasUrl() {
-  const val = document.getElementById('gasUrlInput').value.trim();
-  if (!val.startsWith('https://script.google.com')) {
-    document.getElementById('setupMsg').textContent = '請輸入正確的 GAS 網址（https://script.google.com/...）';
-    return;
-  }
-  try { localStorage.setItem('yf_gas_url', val); } catch(e) {}
-  V2_GAS_URL = val;
-  document.getElementById('setupOverlay').classList.remove('open');
-  init();
-}
-
-function init() {
-  if (!V2_GAS_URL) {
-    document.getElementById('setupOverlay').classList.add('open');
-    return;
-  }
-  fetch(V2_GAS_URL + '?action=ping').then(r=>r.json()).then(d=>{
-    const el = document.createElement('div');
-    el.style.cssText = 'position:fixed;bottom:4px;right:6px;font-size:10px;color:#bbb;z-index:99999;';
-    el.textContent = '前端 ' + FRONTEND_VERSION + ' ／ 後端 ' + (d.version||'未知');
-    document.body.appendChild(el);
-  }).catch(()=>{});
-  if (pwd) loadDashboard(); else renderLogin();
-}
-
-// ── 密碼 ──
-let pwd = '';
-try { pwd = sessionStorage.getItem('yifeng_dashboard_pwd') || ''; } catch(e) {}
+let pwd = sessionStorage.getItem('yifeng_dashboard_pwd') || '';
 
 function renderLogin(errMsg) {
   document.getElementById('app').innerHTML =
@@ -302,7 +287,6 @@ function renderLogin(errMsg) {
       '<input type="password" id="pwdInput" maxlength="12" placeholder="密碼" />' +
       '<button onclick="tryLogin()">登入</button>' +
       (errMsg ? '<div class="err">' + errMsg + '</div>' : '') +
-      '<div style="margin-top:16px;font-size:12px;color:#aaa;"><a href="#" onclick="document.getElementById(\'setupOverlay\').classList.add(\'open\');return false;" style="color:#86efac;">重新設定 GAS 網址</a></div>' +
     '</div>';
   document.getElementById('pwdInput').focus();
   document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key==='Enter') tryLogin(); });
@@ -314,7 +298,8 @@ function tryLogin() {
 }
 
 function todayStr() {
-  const d = new Date(); d.setDate(d.getDate() + 1);
+  const d = new Date();
+  d.setDate(d.getDate() + 1); // 預設顯示隔天（送貨日）
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 
@@ -324,15 +309,13 @@ function loadDashboard(dateOverride) {
     .then(r => r.json())
     .then(data => {
       if (data.error === 'unauthorized') { renderLogin('密碼錯誤，請再試一次'); return; }
-      try { sessionStorage.setItem('yifeng_dashboard_pwd', pwd); } catch(e) {}
+      sessionStorage.setItem('yifeng_dashboard_pwd', pwd);
       renderOrders(data.orders || [], date);
     })
     .catch(() => renderLogin('連線失敗，請檢查網路後再試一次'));
 }
 
 let selectedIds = new Set();
-let currentOrders = [];
-let printOrderIdx = -1;
 
 function renderOrders(orders, date) {
   currentOrders = orders;
@@ -341,13 +324,13 @@ function renderOrders(orders, date) {
     '<input type="date" id="dateInput" value="' + date + '" onchange="loadDashboard(this.value)">' +
     '<button onclick="loadDashboard(document.getElementById(\'dateInput\').value)">重新整理</button>' +
     '<div class="toolbar-menu-wrap">' +
-      '<button class="toolbar-menu-btn" onclick="toggleToolbarMenu(event)">☰</button>' +
+      '<button class="toolbar-menu-btn" onclick="toggleToolbarMenu(event)" title="功能選單">☰</button>' +
       '<div class="toolbar-dropdown" id="toolbarDropdown">' +
         '<button onclick="closeToolbarMenu();showStats()">📊 品項統計</button>' +
+        '<button onclick="closeToolbarMenu();exportExcel(event)">📥 匯出Excel</button>' +
         '<button onclick="closeToolbarMenu();showOverview()">📅 各日總覽</button>' +
         '<button class="menu-danger" onclick="closeToolbarMenu();showDeleteDay()">🗑️ 刪除當天全部</button>' +
         '<button onclick="closeToolbarMenu();showChangePwd()">🔑 修改密碼</button>' +
-        '<button onclick="closeToolbarMenu();document.getElementById(\'setupOverlay\').classList.add(\'open\')">⚙️ 設定 GAS 網址</button>' +
       '</div>' +
     '</div>' +
     '</div>';
@@ -355,6 +338,7 @@ function renderOrders(orders, date) {
   const activeOrders   = orders.filter(o => o.status !== 'cancelled');
   const cancelledCount = orders.length - activeOrders.length;
 
+  // 摘要卡片
   html += '<div class="summary-bar">' +
     '<div class="summary-card"><div class="num">' + activeOrders.length + '</div><div class="label">📦 已下單客戶</div></div>' +
     '<div class="summary-card"><div class="num" style="color:#c0392b;">' + cancelledCount + '</div><div class="label">❌ 已取消</div></div>' +
@@ -369,8 +353,10 @@ function renderOrders(orders, date) {
 
   html += '<div class="batch-bar" id="batchBar" style="display:none;">' +
     '<span id="batchCount">已選取 0 筆</span>' +
-    '<span><button style="background:#555;margin-right:8px;" onclick="clearSelection()">取消選取</button>' +
-    '<button onclick="deleteBatch()">🗑️ 刪除已選取</button></span>' +
+    '<span>' +
+      '<button style="background:#555;margin-right:8px;" onclick="clearSelection()">取消選取</button>' +
+      '<button onclick="deleteBatch()">🗑️ 刪除已選取</button>' +
+    '</span>' +
   '</div>';
 
   orders.sort((a,b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
@@ -380,24 +366,21 @@ function renderOrders(orders, date) {
       ? '<span class="badge badge-cancelled">❌ 已取消</span>'
       : (o.changeCount > 1 ? '<span class="badge badge-modified">✏️ 已修改 ' + (o.changeCount-1) + ' 次</span>' : '<span class="badge badge-new">🆕 新單</span>');
 
-    const pp = o.printedPrices;
-    const priceMeta = (pp && pp.total > 0)
-      ? '<div class="meta" style="color:#15803d;font-weight:600;">💵 批價合計：$' + pp.total + '　<span style="font-weight:400;">' + (pp.printedAt||'') + '</span></div>'
-      : '';
-
     html += '<div class="order-card">' +
       '<div class="order-head" onclick="toggleItems(' + idx + ')">' +
         '<input type="checkbox" class="order-check" onclick="event.stopPropagation();toggleSelect(\'' + o.orderId + '\')">' +
         '<div style="flex:1;"><div class="customer-name">' + escapeHtml(o.customer) + '</div>' +
         '<div class="meta">建立 ' + o.createdAt + (o.updatedAt !== o.createdAt ? '　最後修改 ' + o.updatedAt : '') + '</div>' +
-        priceMeta + '</div>' + badge +
+        (o.printedPrices && o.printedPrices.total > 0 ? '<div class="meta" style="color:#166534;font-weight:600;">💵 批價合計：$' + o.printedPrices.total + '　<span style="font-weight:400;">' + (o.printedPrices.printedAt||'') + '</span></div>' : '') +
+        '</div>' +
+        badge +
       '</div>' +
       '<div class="items" id="items' + idx + '">' +
         o.items.map(it => '<div>• ' + escapeHtml(it.name) + '　' + it.qty + (it.unit||'') + (it.note ? '（'+escapeHtml(it.note)+'）' : '') + '</div>').join('') +
         (o.logs && o.logs.length ? '<div style="margin-top:8px;border-top:1px dashed #e0e0e0;padding-top:6px;">' +
           o.logs.map(l => '<div class="log-line">' + l.time + '　' + l.detail + '</div>').join('') + '</div>' : '') +
         '<div style="display:flex;gap:8px;margin-top:6px;">' +
-          '<button class="delete-btn" style="flex:1;background:#f0fdf4;color:#15803d;border-color:#86efac;margin-top:0;" onclick="event.stopPropagation();showPrint(' + idx + ')">🖨️ 列印送貨單</button>' +
+          '<button class="delete-btn" style="flex:1;background:#f0fdf4;color:#166534;border-color:#86efac;margin-top:0;" onclick="event.stopPropagation();showPrint(' + idx + ')">🖨️ 列印送貨單</button>' +
           '<button class="delete-btn" style="flex:0 0 auto;width:auto;padding:8px 16px;background:#dcfce7;color:#15803d;border-color:#86efac;margin-top:0;" onclick="event.stopPropagation();showBatchPriceFromCard(' + idx + ')">💰 批價</button>' +
         '</div>' +
         '<button class="delete-btn" onclick="event.stopPropagation();deleteOrder(\'' + o.orderId + '\',\'' + escapeHtml(o.customer).replace(/'/g,"\\'") + '\')">🗑️ 刪除這筆訂單（測試用，正式資料請用「取消」）</button>' +
@@ -406,6 +389,29 @@ function renderOrders(orders, date) {
   });
 
   document.getElementById('app').innerHTML = html;
+}
+
+function exportExcel(event) {
+  const date = document.getElementById('dateInput').value;
+  const btn = event.target;
+  const originalText = btn.textContent;
+  btn.disabled = true; btn.textContent = '匯出中...（可能要等 10-30 秒）';
+
+  fetch(V2_GAS_URL + '?action=exportExcel&date=' + encodeURIComponent(date) + '&pwd=' + encodeURIComponent(pwd))
+    .then(r => r.json())
+    .then(result => {
+      btn.disabled = false; btn.textContent = originalText;
+      if (result.error) { alert('匯出失敗：' + result.error); return; }
+      const byteChars = atob(result.base64);
+      const byteNumbers = new Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
+      const blob = new Blob([new Uint8Array(byteNumbers)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = result.filename; document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+    })
+    .catch(() => { btn.disabled = false; btn.textContent = originalText; alert('匯出失敗，請檢查網路後再試一次。'); });
 }
 
 function toggleSelect(orderId) {
@@ -421,89 +427,162 @@ function clearSelection() {
   document.getElementById('batchBar').style.display = 'none';
 }
 
-// ⚠️ 以下 POST 均不加 Content-Type: application/json（否則觸發 CORS preflight，GAS 靜默封鎖）
 function deleteBatch() {
   const count = selectedIds.size;
   if (!count) return;
-  if (!confirm('確定要「永久刪除」選取的 ' + count + ' 筆訂單嗎？\n\n刪除後無法復原，僅建議測試資料使用。')) return;
-  fetch(V2_GAS_URL, { method:'POST', body: JSON.stringify({ action:'deleteBatch', ids: Array.from(selectedIds), pwd }) })
-    .then(r=>r.json()).then(r=>{ if(r.error){alert('刪除失敗：'+r.error);return;} loadDashboard(document.getElementById('dateInput').value); })
-    .catch(()=>alert('刪除失敗，請檢查網路'));
+  if (!confirm('確定要「永久刪除」選取的 ' + count + ' 筆訂單嗎？\n\n這跟「取消」不一樣，刪除後連紀錄都不會留下，無法復原，僅建議測試資料使用。')) return;
+
+  fetch(V2_GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify({ action: 'deleteBatch', ids: Array.from(selectedIds), pwd: pwd })
+  })
+    .then(r => r.json())
+    .then(result => {
+      if (result.error) { alert('刪除失敗：' + result.error); return; }
+      loadDashboard(document.getElementById('dateInput').value);
+    })
+    .catch(() => alert('刪除失敗，請檢查網路後再試一次。'));
 }
 
 function deleteOrder(orderId, customer) {
-  if (!confirm('確定要「永久刪除」' + customer + ' 這筆訂單（' + orderId + '）嗎？\n\n刪除後無法復原，僅建議測試資料使用。')) return;
+  if (!confirm('確定要「永久刪除」' + customer + ' 這筆訂單（' + orderId + '）嗎？\n\n這跟「取消」不一樣，刪除後連紀錄都不會留下，無法復原，僅建議測試資料使用。')) return;
   fetch(V2_GAS_URL + '?action=delete&id=' + encodeURIComponent(orderId) + '&pwd=' + encodeURIComponent(pwd))
-    .then(r=>r.json()).then(r=>{ if(r.error){alert('刪除失敗：'+r.error);return;} loadDashboard(document.getElementById('dateInput').value); })
-    .catch(()=>alert('刪除失敗，請檢查網路'));
+    .then(r => r.json())
+    .then(result => {
+      if (result.error) { alert('刪除失敗：' + result.error); return; }
+      loadDashboard(document.getElementById('dateInput').value);
+    })
+    .catch(() => alert('刪除失敗，請檢查網路後再試一次。'));
 }
 
-function toggleItems(idx) { document.getElementById('items'+idx).classList.toggle('open'); }
-function escapeHtml(s) { return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-function toggleToolbarMenu(e) { e.stopPropagation(); document.getElementById('toolbarDropdown').classList.toggle('open'); }
-function closeToolbarMenu() { var dd=document.getElementById('toolbarDropdown'); if(dd) dd.classList.remove('open'); }
-document.addEventListener('click', closeToolbarMenu);
+function toggleItems(idx) {
+  document.getElementById('items' + idx).classList.toggle('open');
+}
 
-// ── 批價（存 {prices, total, printedAt}）──
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function toggleToolbarMenu(e) {
+  e.stopPropagation();
+  var dd = document.getElementById('toolbarDropdown');
+  dd.classList.toggle('open');
+}
+function closeToolbarMenu() {
+  var dd = document.getElementById('toolbarDropdown');
+  if (dd) dd.classList.remove('open');
+}
+document.addEventListener('click', function() { closeToolbarMenu(); });
+
+let currentOrders = [];
+let printOrderIdx = -1;
+
+// ── 批價：每筆訂單專屬，存在訂單的 printedPrices 欄位 ──
+// 取得該訂單某品項的已存批價
 function getOrderPrice(orderIdx, itemName) {
   var o = currentOrders[orderIdx];
-  if (o && o.printedPrices && o.printedPrices.prices && o.printedPrices.prices[itemName] !== undefined)
+  if (o && o.printedPrices && o.printedPrices.prices && o.printedPrices.prices[itemName] !== undefined) {
     return String(o.printedPrices.prices[itemName]);
+  }
   return '';
 }
 
+// 把批價存回 GAS 訂單紀錄（同時更新本地 currentOrders）
 function savePrintPricesToOrder(orderIdx, priceMap, total) {
   var o = currentOrders[orderIdx];
-  var priceData = { prices: priceMap, total: total, printedAt: new Date().toLocaleString('zh-TW') };
+  var priceData = {prices: priceMap, total: total, printedAt: new Date().toLocaleString('zh-TW')};
+  // 先更新本地，讓卡片立即顯示
   currentOrders[orderIdx].printedPrices = priceData;
-  fetch(V2_GAS_URL, { method:'POST', body: JSON.stringify({ action:'savePrintPrices', pwd, id: o.orderId, prices: priceMap, total }) })
-    .then(r=>r.json()).then(d=>{ if(d.error) alert('⚠️ 批價儲存失敗：'+d.error); })
-    .catch(err=>alert('⚠️ 批價無法儲存：'+err));
+  // 非同步存回 GAS（注意：不能加 Content-Type: application/json，否則觸發 CORS 預檢導致 POST 被封鎖）
+  fetch(V2_GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify({action: 'savePrintPrices', pwd: pwd, id: o.orderId, prices: priceMap, total: total})
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if (d.error) alert('⚠️ 批價儲存失敗：' + d.error + '\n請截圖回報。');
+  }).catch(function(err){ alert('⚠️ 批價無法儲存到雲端：' + err + '\n請確認網路連線後再試。'); });
 }
 
-// ── 自動偵測橋接器 ──
+// ★ 自動偵測橋接器 URL
+// 從 PrintBridge 本機開啟（http://）→ 用同一台機器的 /print（不需掃描）
+// 從 GitHub Pages（https://）→ 先用記憶的 IP，沒有則掃描常見網段
+
 async function probeIp(ip) {
   const ctrl = new AbortController();
-  const timer = setTimeout(()=>ctrl.abort(), 1500);
-  try { const r = await fetch('http://'+ip+':9100/status',{signal:ctrl.signal}); clearTimeout(timer); if(!r.ok) throw 0; return ip; }
-  catch(e) { clearTimeout(timer); throw e; }
+  const timer = setTimeout(() => ctrl.abort(), 1500);
+  try {
+    const r = await fetch('http://' + ip + ':9100/status', { signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!r.ok) throw new Error('not ok');
+    return ip;
+  } catch(e) {
+    clearTimeout(timer);
+    throw e;
+  }
 }
 
 async function autoDiscoverBridge() {
-  const cands = [
-    ...Array.from({length:14},(_,i)=>'172.20.10.'+(i+2)),
-    ...Array.from({length:50},(_,i)=>'192.168.1.'+(i+1)),
-    ...Array.from({length:50},(_,i)=>'192.168.0.'+(i+1)),
+  // 同時掃多個常見網段：
+  //   172.20.10.x  → iPhone 個人熱點固定段（.2~.15）
+  //   192.168.1.x  → 一般家用/辦公室路由器
+  //   192.168.0.x  → 另一種常見家用路由器
+  const candidates = [
+    ...Array.from({length: 14}, (_, i) => '172.20.10.' + (i + 2)),
+    ...Array.from({length: 50}, (_, i) => '192.168.1.' + (i + 1)),
+    ...Array.from({length: 50}, (_, i) => '192.168.0.' + (i + 1)),
   ];
-  return Promise.any(cands.map(ip=>probeIp(ip))).catch(()=>null);
+  const found = await Promise.any(candidates.map(ip => probeIp(ip))).catch(() => null);
+  return found;
 }
 
 async function autoFillBridgeUrl() {
   const input = document.getElementById('bridgeUrl');
-  if (window.location.protocol === 'http:') { input.value = window.location.origin+'/print'; return; }
-  try { const s = localStorage.getItem('yifeng_bridgeUrl'); if(s){input.value=s;return;} } catch(e) {}
-  input.value=''; input.placeholder='🔍 自動掃描中...';
+  // 從 PrintBridge 本機開啟：直接用同一台機器
+  if (window.location.protocol === 'http:') {
+    input.value = window.location.origin + '/print';
+    return;
+  }
+  // GitHub Pages：先試記憶的 IP
+  try {
+    const stored = localStorage.getItem('yifeng_bridgeUrl');
+    if (stored) { input.value = stored; return; }
+  } catch(e) {}
+  // 沒有記憶：自動掃描
+  input.value = '';
+  input.placeholder = '🔍 自動掃描中...';
   const ip = await autoDiscoverBridge();
   if (ip) {
-    const url = 'http://'+ip+':9100/print';
+    const url = 'http://' + ip + ':9100/print';
     input.value = url;
+    input.placeholder = '自動偵測';
     try { localStorage.setItem('yifeng_bridgeUrl', url); } catch(e) {}
-  } else { input.placeholder='找不到橋接器，請手動輸入 IP'; }
+  } else {
+    input.placeholder = '找不到印表機，請手動輸入 IP';
+  }
 }
 
 function showPrint(idx) {
   printOrderIdx = idx;
   autoFillBridgeUrl();
-  try { const s=localStorage.getItem('yifeng_handler'); if(s) document.getElementById('printHandler').value=s; } catch(e) {}
+  try {
+    const savedHandler = localStorage.getItem('yifeng_handler');
+    if (savedHandler) document.getElementById('printHandler').value = savedHandler;
+  } catch(e) {}
   const o = currentOrders[idx];
   document.getElementById('printInfo').innerHTML =
-    '<strong>客戶：</strong>'+escapeHtml(o.customer)+'　<strong>送貨日期：</strong>'+escapeHtml(o.deliveryDate||'')+(o.notes?'<br><strong>備註：</strong>'+escapeHtml(o.notes):'');
+    '<strong>客戶：</strong>' + escapeHtml(o.customer) +
+    '　<strong>送貨日期：</strong>' + escapeHtml(o.deliveryDate || '') +
+    (o.notes ? '<br><strong>備註：</strong>' + escapeHtml(o.notes) : '');
+  // ★ 直接用該筆訂單已存的批價填入（無需 async，不會跨單污染）
   let rows = '';
-  (o.items||[]).forEach((it,i) => {
-    const saved = getOrderPrice(idx, it.name||'');
-    rows += '<tr><td>'+escapeHtml(it.name||'')+'</td><td>'+(it.qty||0)+'</td><td>'+escapeHtml(it.unit||'')+'</td>' +
-      '<td><input type="number" min="0" step="0.01" value="'+saved+'" id="price_'+i+'" oninput="calcPrintTotal()" /></td>' +
-      '<td id="sub_'+i+'">—</td></tr>';
+  (o.items || []).forEach((it, i) => {
+    const saved = getOrderPrice(idx, it.name || '');
+    rows += '<tr>' +
+      '<td>' + escapeHtml(it.name||'') + '</td>' +
+      '<td>' + (it.qty||0) + '</td>' +
+      '<td>' + escapeHtml(it.unit||'') + '</td>' +
+      '<td><input type="number" min="0" step="0.01" value="' + saved + '" id="price_' + i + '" oninput="calcPrintTotal()" /></td>' +
+      '<td id="sub_' + i + '">—</td>' +
+    '</tr>';
   });
   document.getElementById('printItems').innerHTML = rows;
   calcPrintTotal();
@@ -513,281 +592,618 @@ function showPrint(idx) {
 function calcPrintTotal() {
   const o = currentOrders[printOrderIdx];
   let total = 0;
-  (o.items||[]).forEach((it,i) => {
-    const price = parseFloat(document.getElementById('price_'+i).value)||0;
-    const sub = price * (Number(it.qty)||0);
+  (o.items || []).forEach((it, i) => {
+    const price = parseFloat(document.getElementById('price_' + i).value) || 0;
+    const qty = Number(it.qty) || 0;
+    const sub = price * qty;
     total += sub;
-    document.getElementById('sub_'+i).textContent = price?'$'+sub:'—';
+    document.getElementById('sub_' + i).textContent = price ? '$' + sub : '—';
   });
-  document.getElementById('printTotal').textContent = '總計：$'+total;
+  document.getElementById('printTotal').textContent = '總計：$' + total;
 }
-function closePrint() { document.getElementById('printOverlay').classList.remove('open'); }
 
-// ── ESC/POS 工具 ──
-function _clen(s) { return [...String(s||'')].reduce((a,c)=>a+(c.charCodeAt(0)>127?2:1),0); }
-function padR(s,n){s=String(s||'');return s+' '.repeat(Math.max(0,n-_clen(s)));}
-function padL(s,n){s=String(s||'');return ' '.repeat(Math.max(0,n-_clen(s)))+s;}
+function closePrint() {
+  document.getElementById('printOverlay').classList.remove('open');
+}
 
-var _big5Table=null;
-function _getBig5Table(){
-  if(_big5Table) return _big5Table;
-  _big5Table={};
-  var dec=new TextDecoder('big5',{fatal:false});
-  for(var hi=0xA1;hi<=0xF9;hi++){
-    for(var lo=0x40;lo<=0xFE;lo++){
-      if(lo>=0x7F&&lo<=0xA0) continue;
-      var ch=dec.decode(new Uint8Array([hi,lo]));
-      if(ch&&ch.length===1&&ch.charCodeAt(0)>127&&ch!=='▒') _big5Table[ch]=(hi<<8)|lo;
+// ── 列印欄位對齊工具（考慮中文佔 2 格）──
+function _clen(s) {
+  return [...String(s||'')].reduce((a,c) => a + (c.charCodeAt(0) > 127 ? 2 : 1), 0);
+}
+function padR(s, n) { s = String(s||''); return s + ' '.repeat(Math.max(0, n - _clen(s))); }
+function padL(s, n) { s = String(s||''); return ' '.repeat(Math.max(0, n - _clen(s))) + s; }
+
+// ── Big5 編碼器（使用瀏覽器內建 TextDecoder 建立反查表）──
+// 原理：TextDecoder 支援 Big5 解碼，利用它逐一解碼所有 Big5 雙位元組組合，
+// 建立「Unicode 字元 → Big5 雙位元組」的反查表，再用來把印表機字串轉成 Big5。
+var _big5Table = null;
+function _getBig5Table() {
+  if (_big5Table) return _big5Table;
+  _big5Table = {};
+  var dec = new TextDecoder('big5', { fatal: false });
+  // Big5 高位元組：0xA1–0xF9，低位元組：0x40–0x7E 和 0xA1–0xFE
+  for (var hi = 0xA1; hi <= 0xF9; hi++) {
+    for (var lo = 0x40; lo <= 0xFE; lo++) {
+      if (lo >= 0x7F && lo <= 0xA0) continue;  // 無效區間
+      var bytes = new Uint8Array([hi, lo]);
+      var ch = dec.decode(bytes);
+      // 只收錄非 ASCII、且非替換字元的有效字元
+      if (ch && ch.length === 1 && ch.charCodeAt(0) > 127 && ch !== '�') {
+        _big5Table[ch] = (hi << 8) | lo;
+      }
     }
   }
   return _big5Table;
 }
-function _encodeBig5(str){
-  var t=_getBig5Table(),buf=[];
-  for(var i=0;i<str.length;i++){
-    var c=str[i],code=c.charCodeAt(0);
-    if(code<0x80){buf.push(code);}
-    else{var b5=t[c];if(b5){buf.push((b5>>8)&0xFF);buf.push(b5&0xFF);}else buf.push(0x3F);}
+function _encodeBig5(str) {
+  var table = _getBig5Table();
+  var buf = [];
+  for (var i = 0; i < str.length; i++) {
+    var c = str[i];
+    var code = c.charCodeAt(0);
+    if (code < 0x80) {
+      buf.push(code);               // ASCII / ESC-POS 控制字元直接輸出
+    } else {
+      var b5 = table[c];
+      if (b5) {
+        buf.push((b5 >> 8) & 0xFF); // Big5 高位元組
+        buf.push(b5 & 0xFF);        // Big5 低位元組
+      } else {
+        buf.push(0x3F);             // 無法對應時輸出 '?'
+      }
+    }
   }
   return new Uint8Array(buf);
 }
 
-// ── 螢幕預覽 ──
-function _esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+// ── 螢幕預覽（不列印）──
+function _esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-function showReceiptPreview(){
-  const o=currentOrders[printOrderIdx];
-  const handler=(document.getElementById('printHandler').value||'').trim();
-  const ITEMS_PER_PAGE=13,PAPER_TARGET_MM=143,C_MM=3.87,T_MM=3.61,FIXED_LINES=13;
-  const SEP40='----------------------------------------';
-  const items=o.items||[];
-  const numPages=Math.max(1,Math.ceil(items.length/ITEMS_PER_PAGE));
-  let total=0;
-  const prices=items.map((it,i)=>{const p=parseFloat((document.getElementById('price_'+i)||{}).value||0)||0;total+=p*(Number(it.qty)||0);return p;});
-  let pagesHtml='';
-  for(let page=0;page<numPages;page++){
-    const si=page*ITEMS_PER_PAGE,ei=Math.min(si+ITEMS_PER_PAGE,items.length),cnt=ei-si;
-    const isLast=page===numPages-1,tag=numPages>1?'('+(page+1)+'/'+numPages+')':'';
-    const pad=(s,n,r)=>{var w=0;for(var k=0;k<s.length;k++)w+=s.charCodeAt(k)>127?2:1;var sp=Math.max(0,n-w);return r?s+' '.repeat(sp):' '.repeat(sp)+s;};
-    let lines=[];
-    var title='義豐行'+tag;
-    lines.push('<b>'+_esc(' '.repeat(Math.max(0,Math.floor((40-title.length*2)/2)))+title)+'</b>');
-    lines.push('<span style="color:#ccc">·</span>');
-    lines.push(_esc('出貨日期：'+(o.deliveryDate||'')));
-    lines.push(_esc('客戶：'+(o.customer||'')));
-    lines.push('<span style="color:#ccc">·</span>');
-    lines.push('<span style="color:#999">'+_esc(SEP40)+'</span>');
-    lines.push('<b>'+_esc(pad('品名',20,true)+pad('數量',6,false)+pad('單價',7,false)+pad('小計',7,false))+'</b>');
-    lines.push('<span style="color:#ccc">·</span>');
-    lines.push('<span style="color:#999">'+_esc(SEP40)+'</span>');
-    for(var i=si;i<ei;i++){var it=items[i],p=prices[i],qty=Number(it.qty)||0,sub=p*qty,qs=qty+(it.unit||'');lines.push(_esc(pad(it.name||'',20,true)+pad(qs,6,false)+pad(String(p),7,false)+pad(String(sub),7,false)));}
-    lines.push('<span style="color:#999">'+_esc(SEP40)+'</span>');
-    if(isLast){var l='經手人：'+handler,r2='合計：$'+total,lw=0,rw=0;for(var c=0;c<l.length;c++)lw+=l.charCodeAt(c)>127?2:1;for(var c=0;c<r2.length;c++)rw+=r2.charCodeAt(c)>127?2:1;lines.push('<b>'+_esc(l+' '.repeat(Math.max(1,40-lw-rw))+r2)+'</b>');}
-    else lines.push('<span style="text-align:center;display:block">'+_esc('--- 請翻至下一張 ---')+'</span>');
-    lines.push('<span style="color:#ccc">·</span>');lines.push('<span style="color:#ccc">·</span>');
-    const cL=FIXED_LINES+cnt,trL=Math.max(1,Math.round((PAPER_TARGET_MM-cL*C_MM)/T_MM));
-    const cMM=Math.round(cL*C_MM),tMM=Math.round(cMM+trL*T_MM);
-    if(numPages>1) pagesHtml+='<div style="font-weight:600;color:#15803d;margin-bottom:6px;">第'+(page+1)+'張/共'+numPages+'張</div>';
-    pagesHtml+='<div class="preview-paper">'+lines.join('\n')+'</div>';
-    pagesHtml+='<div class="preview-trail">▓ 空白走紙 '+trL+' LF × '+T_MM+'mm = '+Math.round(trL*T_MM)+'mm</div>';
-    pagesHtml+='<div class="preview-stat">內容 '+cMM+'mm + 走紙 '+Math.round(trL*T_MM)+'mm ≈ '+tMM+'mm</div>';
+function showReceiptPreview() {
+  const o = currentOrders[printOrderIdx];
+  const handler = (document.getElementById('printHandler').value || '').trim();
+  const ITEMS_PER_PAGE    = 13;
+  const PAPER_TARGET_MM   = 143;   // v2.4校正
+  const C_MM              = 3.87;  // v2.4重新校正（v2.3實測）
+  const T_MM              = 3.61;  // v2.4重新校正
+  const FIXED_LINES       = 13;
+  const SEP40 = '----------------------------------------';
+
+  const items = o.items || [];
+  const numPages = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
+
+  let total = 0;
+  const prices = items.map((it, i) => {
+    const priceEl = document.getElementById('price_' + i);
+    const price = parseFloat(priceEl ? priceEl.value : 0) || 0;
+    total += price * (Number(it.qty) || 0);
+    return price;
+  });
+
+  let pagesHtml = '';
+  for (let page = 0; page < numPages; page++) {
+    const startIdx    = page * ITEMS_PER_PAGE;
+    const endIdx      = Math.min(startIdx + ITEMS_PER_PAGE, items.length);
+    const pageItemCnt = endIdx - startIdx;
+    const isLast      = page === numPages - 1;
+    const pageTag     = numPages > 1 ? '(' + (page+1) + '/' + numPages + ')' : '';
+
+    let lines = [];
+    const pad = function(s,n,right){
+      var w = 0;
+      for(var k=0;k<s.length;k++) w += s.charCodeAt(k)>127?2:1;
+      var sp = Math.max(0, n - w);
+      return right ? s + ' '.repeat(sp) : ' '.repeat(sp) + s;
+    };
+
+    // 標題9行（含3行間距）
+    var title = '義豐行' + pageTag;
+    var titlePad = Math.max(0, Math.floor((40 - (title.length*2)) / 2));
+    lines.push('<b>' + _esc(' '.repeat(titlePad) + title) + '</b>');    // 行1
+    lines.push('<span style="color:#ccc">·</span>');                     // 行2 [間距]
+    lines.push(_esc('出貨日期：' + (o.deliveryDate || '')));             // 行3
+    lines.push(_esc('客戶：' + (o.customer || '')));                     // 行4
+    lines.push('<span style="color:#ccc">·</span>');                     // 行5 [間距]
+    lines.push('<span style="color:#999">' + _esc(SEP40) + '</span>');  // 行6
+    lines.push('<b>' + _esc(pad('品名',20,true) + pad('數量',6,false) + pad('單價',7,false) + pad('小計',7,false)) + '</b>');  // 行7
+    lines.push('<span style="color:#ccc">·</span>');                     // 行8 [間距]
+    lines.push('<span style="color:#999">' + _esc(SEP40) + '</span>');  // 行9
+
+    // 品項（單行）
+    for (var i = startIdx; i < endIdx; i++) {
+      var it = items[i];
+      var price = prices[i];
+      var qty = Number(it.qty) || 0;
+      var sub = price * qty;
+      var qtyStr = qty + (it.unit || '');
+      lines.push(_esc(pad(it.name||'',20,true) + pad(qtyStr,6,false) + pad(String(price),7,false) + pad(String(sub),7,false)));
+    }
+
+    // 底部4行（含2行間距）
+    lines.push('<span style="color:#999">' + _esc(SEP40) + '</span>');  // 頁尾行1
+    if (isLast) {
+      var left = '經手人：' + handler;
+      var right = '合計：$' + total;
+      var lw = 0; for(var c=0;c<left.length;c++) lw+=left.charCodeAt(c)>127?2:1;
+      var rw = 0; for(var c=0;c<right.length;c++) rw+=right.charCodeAt(c)>127?2:1;
+      var gap = Math.max(1, 40 - lw - rw);
+      lines.push('<b>' + _esc(left + ' '.repeat(gap) + right) + '</b>');  // 頁尾行2
+    } else {
+      lines.push('<span style="text-align:center;display:block">' + _esc('--- 請翻至下一張 ---') + '</span>');  // 頁尾行2
+    }
+    lines.push('<span style="color:#ccc">·</span>');  // 頁尾行3 [間距]
+    lines.push('<span style="color:#ccc">·</span>');  // 頁尾行4 [間距]
+
+    const contentLines = FIXED_LINES + pageItemCnt;
+    const trailLines   = Math.max(1, Math.round((PAPER_TARGET_MM - contentLines * C_MM) / T_MM));
+    const contentMM    = Math.round(contentLines * C_MM);
+    const totalMM      = Math.round(contentMM + trailLines * T_MM);
+    const fillPct      = Math.round(contentMM / PAPER_TARGET_MM * 100);
+
+    if (numPages > 1) {
+      pagesHtml += '<div style="font-weight:600;color:#15803d;margin-bottom:6px;">第 ' + (page+1) + ' 張 / 共 ' + numPages + ' 張</div>';
+    }
+    pagesHtml += '<div class="preview-paper">' + lines.join('\n') + '</div>';
+    pagesHtml += '<div class="preview-trail">▓ 空白走紙 ' + trailLines + ' LF × ' + T_MM + 'mm = ' + Math.round(trailLines*T_MM) + 'mm</div>';
+    pagesHtml += '<div class="preview-stat">內容 ' + contentMM + 'mm（' + fillPct + '%）+ 走紙 ' + Math.round(trailLines*T_MM) + 'mm ≈ ' + totalMM + 'mm</div>';
   }
-  var modal=document.createElement('div');
-  modal.className='preview-overlay';modal.id='previewOverlay';
-  modal.onclick=function(e){if(e.target===modal)closeReceiptPreview();};
-  modal.innerHTML='<div class="preview-box"><div class="preview-header"><h3>📄 螢幕預覽（不會列印）</h3><button class="preview-close" onclick="closeReceiptPreview()">×</button></div>'+pagesHtml+'</div>';
+
+  var modal = document.createElement('div');
+  modal.className = 'preview-overlay';
+  modal.id = 'previewOverlay';
+  modal.onclick = function(e){ if(e.target===modal) closeReceiptPreview(); };
+  modal.innerHTML =
+    '<div class="preview-box">' +
+      '<div class="preview-header">' +
+        '<h3>📄 螢幕預覽（不會列印）</h3>' +
+        '<button class="preview-close" onclick="closeReceiptPreview()">×</button>' +
+      '</div>' +
+      pagesHtml +
+    '</div>';
   document.body.appendChild(modal);
 }
-function closeReceiptPreview(){var el=document.getElementById('previewOverlay');if(el)el.remove();}
 
-// ── 送出列印 ──
-function sendPrint(){
-  const o=currentOrders[printOrderIdx];
-  const bridgeUrl=document.getElementById('bridgeUrl').value.trim();
-  const handler=(document.getElementById('printHandler').value||'').trim();
-  const ESC='\x1b',GS='\x1d',LF='\n',INDENT='  ',COL_W=40-INDENT.length;
-  const SEP=INDENT+'-'.repeat(COL_W)+LF;
-  const IPP=13,ISP=IPP-1,IRT=IPP+ISP,LSN=47,PTM=151,CMM=3.87,TMM=3.61,FL=13;
-  const items=o.items||[];
-  const numPages=Math.max(1,Math.ceil(items.length/IPP));
-  let total=0;const priceMap={};
-  const prices=items.map((it,i)=>{const p=parseFloat((document.getElementById('price_'+i)||{}).value||0)||0;const qty=Number(it.qty)||0;total+=p*qty;if(p>0)priceMap[it.name||'']=String(p);return p;});
-  let fullStr='';
-  for(let page=0;page<numPages;page++){
-    const si=page*IPP,ei=Math.min(si+IPP,items.length),cnt=ei-si;
-    const isLast=(page===numPages-1),tag=numPages>1?'('+(page+1)+'/'+numPages+')':'';
-    let r=ESC+'@';
-    r+=ESC+'3'+String.fromCharCode(LSN);
-    r+=ESC+'a\x01';r+=ESC+'E\x01';r+=ESC+'!\x10';r+='義豐行';r+=ESC+'!\x00';r+=tag+LF;r+=ESC+'E\x00';r+=ESC+'a\x00';
-    r+=INDENT+LF;
-    r+=INDENT+'出貨日期：'+(o.deliveryDate||'')+LF;
-    r+=INDENT+'客戶：'+(o.customer||'')+LF;
-    r+=INDENT+LF;r+=SEP;
-    r+=INDENT+padR('品名',18)+padL('數量',6)+padL('單價',7)+padL('小計',7)+LF;
-    r+=INDENT+LF;r+=SEP;
-    let sl=0;
-    for(let i=si;i<ei;i++){const it=items[i],p=prices[i],qty=Number(it.qty)||0,sub=p*qty,qs=qty+(it.unit||'');r+=INDENT+padR(it.name||'',18)+padL(qs,6)+padL(String(p),7)+padL(String(sub),7)+LF;sl++;if(i<ei-1){r+=INDENT+LF;sl++;}}
-    for(let j=sl;j<IRT;j++) r+=INDENT+LF;
-    r+=SEP;
-    if(isLast){const lp='經手人：'+handler,rp='合計：$'+total,gap=Math.max(1,COL_W-_clen(lp)-_clen(rp));r+=INDENT+lp+' '.repeat(gap)+rp+LF;}
-    else{r+=ESC+'a\x01';r+='--- 請翻至下一張 ---'+LF;r+=ESC+'a\x00';}
-    r+=INDENT+LF;r+=INDENT+LF;
-    const cL=FL+IRT,trail=Math.max(1,Math.round((PTM-cL*CMM)/TMM));
-    r+=LF.repeat(trail);r+=GS+'V\x42\x00';
-    fullStr+=r;
-  }
-  const bytes=_encodeBig5(fullStr);
-  try{localStorage.setItem('yifeng_bridgeUrl',bridgeUrl);}catch(e){}
-  try{if(handler)localStorage.setItem('yifeng_handler',handler);}catch(e){}
-  fetch(bridgeUrl,{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:bytes})
-    .then(res=>{
-      if(res.ok){
-        savePrintPricesToOrder(printOrderIdx,priceMap,total);
-        alert(numPages>1?'✅ 已送出列印！（共'+numPages+'張）':'✅ 已送出列印！');
-        closePrint();
-        renderOrders(currentOrders, document.getElementById('dateInput')?document.getElementById('dateInput').value:'');
-      } else res.text().then(t=>alert('列印失敗：'+t));
-    })
-    .catch(err=>alert('連線失敗，請確認橋接器（Android APK）已啟動。\n\n'+err));
+function closeReceiptPreview() {
+  var el = document.getElementById('previewOverlay');
+  if (el) el.remove();
 }
 
-// ── 品項統計 ──
-function showStats(){
-  const ao=currentOrders.filter(o=>o.status!=='cancelled');
-  if(!ao.length){document.getElementById('statsBody').innerHTML='<div class="empty">這天目前還沒有有效訂單</div>';document.getElementById('statsOverlay').classList.add('open');return;}
-  const totals={};
-  ao.forEach(o=>(o.items||[]).forEach(it=>{const k=(it.name||'')+'|'+(it.unit||'');if(!totals[k])totals[k]={name:it.name||'',unit:it.unit||'',qty:0};totals[k].qty+=Number(it.qty)||0;}));
-  const rows=Object.values(totals).sort((a,b)=>a.name.localeCompare(b.name,'zh'));
-  let html='<table class="stats-table"><thead><tr><th>品項</th><th>單位</th><th>總計</th></tr></thead><tbody>';
-  rows.forEach(r=>{html+='<tr><td>'+escapeHtml(r.name)+'</td><td>'+escapeHtml(r.unit)+'</td><td>'+r.qty+'</td></tr>';});
-  html+='</tbody></table>';
-  document.getElementById('statsBody').innerHTML=html;
+function sendPrint() {
+  const o = currentOrders[printOrderIdx];
+  const bridgeUrl = document.getElementById('bridgeUrl').value.trim();
+  const handler = (document.getElementById('printHandler').value || '').trim();
+
+  const ESC = '\x1b', GS = '\x1d', LF = '\n';
+  const INDENT   = '  ';          // 左縮排 2 格（≈1個中文字寬）
+  const COL_W    = 40 - INDENT.length;  // 可用寬度 38
+  const SEP = INDENT + '-'.repeat(COL_W) + LF;  // 縮排後 38 條線
+
+  const ITEMS_PER_PAGE      = 13;  // 每張最多品項數
+  // 每行品項後加一空白間距（最後一行不加）→ 12個間距
+  const ITEM_SPACERS        = ITEMS_PER_PAGE - 1; // 12
+  const ITEM_ROW_TOTAL      = ITEMS_PER_PAGE + ITEM_SPACERS; // 25（固定）
+  const LINE_SPACING_N      = 47;  // ESC 3 n（最大安全值=47）
+  // v2.4校正：C=3.87, T=3.61
+  // v2.8：ITEM_ROW_TOTAL=25, contentLines=13+25=38
+  //   38×3.87=147mm > 143mm → PAPER_TARGET=151, trail=1 → ~151mm
+  const PAPER_TARGET_MM  = 151;   // v2.8：每行間距後最小可達紙張長度
+  const C_MM             = 3.87;  // 有內容行推紙 mm
+  const T_MM             = 3.61;  // 空白 LF 推紙 mm
+  const FIXED_LINES      = 13;    // 標題9行＋頁尾4行
+
+  const items = o.items || [];
+  const numPages = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
+
+  // ── 先算好每項價格與總計 ──
+  let total = 0;
+  const priceMap = {};
+  const prices = items.map((it, i) => {
+    const priceEl = document.getElementById('price_' + i);
+    const price = parseFloat(priceEl ? priceEl.value : 0) || 0;
+    const qty = Number(it.qty) || 0;
+    total += price * qty;
+    if (price > 0) priceMap[it.name || ''] = String(price);
+    return price;
+  });
+
+  // ── 逐頁組字串，全部串接成一次列印 ──
+  let fullStr = '';
+
+  for (let page = 0; page < numPages; page++) {
+    const startIdx    = page * ITEMS_PER_PAGE;
+    const endIdx      = Math.min(startIdx + ITEMS_PER_PAGE, items.length);
+    const pageItemCnt = endIdx - startIdx;   // 本頁實際品項數
+    const isLast      = (page === numPages - 1);
+    const pageTag     = numPages > 1 ? '(' + (page + 1) + '/' + numPages + ')' : '';
+
+    let r = ESC + '@';                                          // 初始化印表機
+    r += ESC + '3' + String.fromCharCode(LINE_SPACING_N);      // 設定行距
+
+    // ── 標題區（9行，含3行間距）──
+    r += ESC + 'a\x01';       // 置中
+    r += ESC + 'E\x01';       // 粗體
+    r += ESC + '!\x10';       // 雙倍高度（義豐行專用）
+    r += '義豐行';
+    r += ESC + '!\x00';       // 恢復正常大小
+    r += pageTag + LF;                                                    // 行1
+    r += ESC + 'E\x00';       // 取消粗體
+    r += ESC + 'a\x00';       // 靠左
+    r += INDENT + LF;                                                     // 行2 [間距]
+    r += INDENT + '出貨日期：' + (o.deliveryDate || '') + LF;            // 行3
+    r += INDENT + '客戶：' + (o.customer || '') + LF;                    // 行4
+    r += INDENT + LF;                                                     // 行5 [間距]
+    r += SEP;                                                             // 行6
+    r += INDENT + padR('品名', 18) + padL('數量', 6) + padL('單價', 7) + padL('小計', 7) + LF;  // 行7
+    r += INDENT + LF;                                                     // 行8 [間距]
+    r += SEP;                                                             // 行9
+
+    // ── 品項區：每行品項後加一空白行（最後一行不加），均勻間距 ──
+    let itemSecLines = 0;
+    for (let i = startIdx; i < endIdx; i++) {
+      const it     = items[i];
+      const price  = prices[i];
+      const qty    = Number(it.qty) || 0;
+      const sub    = price * qty;
+      const qtyStr = qty + (it.unit || '');
+      r += INDENT + padR(it.name || '', 18) + padL(qtyStr, 6) + padL(String(price), 7) + padL(String(sub), 7) + LF;
+      itemSecLines++;
+      // 每行品項後加間距，最後一行品項前（頁尾前）不加
+      if (i < endIdx - 1) {
+        r += INDENT + LF;
+        itemSecLines++;
+      }
+    }
+    // 補空白行至固定 ITEM_ROW_TOTAL，確保各頁等長格式相同
+    for (let j = itemSecLines; j < ITEM_ROW_TOTAL; j++) {
+      r += INDENT + LF;
+    }
+
+    // ── 底部（4行，含2行間距）──
+    r += SEP;                                                             // 頁尾行1
+    if (isLast) {
+      const leftPart  = '經手人：' + handler;
+      const rightPart = '合計：$' + total;
+      const gap = Math.max(1, COL_W - _clen(leftPart) - _clen(rightPart));
+      r += INDENT + leftPart + ' '.repeat(gap) + rightPart + LF;         // 頁尾行2
+    } else {
+      r += ESC + 'a\x01';
+      r += '--- 請翻至下一張 ---' + LF;                                  // 頁尾行2
+      r += ESC + 'a\x00';
+    }
+    r += INDENT + LF;                                                     // 頁尾行3 [間距]
+    r += INDENT + LF;                                                     // 頁尾行4 [間距]
+
+    // ── 物理走紙：用實測 C/T 值精確對齊紙張長度 ──
+    // trail = round((PAPER_TARGET - contentLines×C) / T)
+    // 空白 LF（bare）推紙 T=2.83mm；有字元行推紙 C=4.71mm
+    // 品項區固定 ITEM_ROW_TOTAL 行（含間距），contentLines 永遠相同
+    const contentLines = FIXED_LINES + ITEM_ROW_TOTAL;
+    const pageTRAIL   = Math.max(1, Math.round((PAPER_TARGET_MM - contentLines * C_MM) / T_MM));
+    r += LF.repeat(pageTRAIL);
+    r += GS + 'V\x42\x00';
+
+    fullStr += r;
+  }
+
+  // 轉成 Big5 Uint8Array（臺灣熱感式印表機通常使用 Big5 編碼）
+  const bytes = _encodeBig5(fullStr);
+
+  // 記憶橋接器 URL 和經手人
+  try { localStorage.setItem('yifeng_bridgeUrl', bridgeUrl); } catch(e) {}
+  try { if (handler) localStorage.setItem('yifeng_handler', handler); } catch(e) {}
+
+  fetch(bridgeUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/octet-stream' },
+    body: bytes
+  })
+  .then(res => {
+    if (res.ok) {
+      // ★ 列印成功 → 把批價與合計存回這筆訂單（GAS 第9欄）
+      savePrintPricesToOrder(printOrderIdx, priceMap, total);
+      const msg = numPages > 1 ? '✅ 已送出列印！（共 ' + numPages + ' 張）' : '✅ 已送出列印！';
+      alert(msg);
+      closePrint();
+      // 重新渲染卡片以顯示批價合計
+      renderOrders(currentOrders, document.getElementById('dateInput') ? document.getElementById('dateInput').value : '');
+    } else {
+      res.text().then(t => alert('列印失敗：' + t));
+    }
+  })
+  .catch(err => alert('連線失敗，請確認橋接器已啟動。\n\n' + err));
+}
+
+function showStats() {
+  const activeOrders = currentOrders.filter(o => o.status !== 'cancelled');
+  if (!activeOrders.length) {
+    document.getElementById('statsBody').innerHTML = '<div class="empty">這天目前還沒有有效訂單</div>';
+    document.getElementById('statsOverlay').classList.add('open');
+    return;
+  }
+  // 加總：key = "品項名稱|單位"
+  const totals = {};
+  activeOrders.forEach(o => {
+    (o.items || []).forEach(it => {
+      const key = (it.name || '') + '|' + (it.unit || '');
+      if (!totals[key]) totals[key] = { name: it.name || '', unit: it.unit || '', qty: 0 };
+      totals[key].qty += Number(it.qty) || 0;
+    });
+  });
+  const rows = Object.values(totals).sort((a,b) => a.name.localeCompare(b.name, 'zh'));
+  let html = '<table class="stats-table"><thead><tr><th>品項</th><th>單位</th><th>總計</th></tr></thead><tbody>';
+  rows.forEach(r => {
+    html += '<tr><td>' + escapeHtml(r.name) + '</td><td>' + escapeHtml(r.unit) + '</td><td>' + r.qty + '</td></tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('statsBody').innerHTML = html;
   document.getElementById('statsOverlay').classList.add('open');
 }
-function closeStats(){document.getElementById('statsOverlay').classList.remove('open');}
 
-// ── 批價彈窗 ──
-function showBatchPriceFromCard(idx){printOrderIdx=idx;showBatchPrice();}
-function showBatchPrice(){
-  const o=currentOrders[printOrderIdx];
-  document.getElementById('priceInfo').textContent='客戶：'+o.customer+'　送貨日期：'+(o.deliveryDate||'');
-  let rows='';
-  (o.items||[]).forEach((it,i)=>{
-    const pe=document.getElementById('price_'+i);
-    const val=(pe&&pe.value)?pe.value:getOrderPrice(printOrderIdx,it.name||'');
-    rows+='<div class="price-row"><div class="price-name">'+escapeHtml(it.name||'')+'</div><div class="price-qty">'+it.qty+(it.unit||'')+'</div><input class="price-input" type="number" min="0" step="0.01" value="'+val+'" id="bp_'+i+'" placeholder="單價" /></div>';
+function closeStats() {
+  document.getElementById('statsOverlay').classList.remove('open');
+}
+
+function showBatchPriceFromCard(idx) {
+  // 從卡片開批價（不需要先開列印 modal）
+  printOrderIdx = idx;
+  showBatchPrice();
+}
+
+function showBatchPrice() {
+  const o = currentOrders[printOrderIdx];
+  document.getElementById('priceInfo').textContent = '客戶：' + o.customer + '　送貨日期：' + (o.deliveryDate || '');
+  let rows = '';
+  (o.items || []).forEach((it, i) => {
+    // 優先讀列印表格已輸入的值，其次讀該訂單已存批價
+    const printEl = document.getElementById('price_' + i);
+    const val = (printEl && printEl.value) ? printEl.value : getOrderPrice(printOrderIdx, it.name || '');
+    rows += '<div class="price-row">' +
+      '<div class="price-name">' + escapeHtml(it.name || '') + '</div>' +
+      '<div class="price-qty">' + it.qty + (it.unit || '') + '</div>' +
+      '<input class="price-input" type="number" min="0" step="0.01" value="' + val + '" id="bp_' + i + '" placeholder="單價" />' +
+    '</div>';
   });
-  document.getElementById('priceRows').innerHTML=rows;
+  document.getElementById('priceRows').innerHTML = rows;
   document.getElementById('priceOverlay').classList.add('open');
-  const first=(o.items||[]).findIndex((_,i)=>{const el=document.getElementById('bp_'+i);return el&&!el.value;});
-  setTimeout(()=>{const el=document.getElementById('bp_'+(first>=0?first:0));if(el)el.focus();},100);
-}
-function closeBatchPrice(){document.getElementById('priceOverlay').classList.remove('open');}
-function applyBatchPrice(){
-  const o=currentOrders[printOrderIdx];const priceMap={};let total=0;
-  (o.items||[]).forEach((it,i)=>{
-    const bpEl=document.getElementById('bp_'+i);if(!bpEl)return;
-    const val=bpEl.value,price=parseFloat(val)||0;
-    if(price>0)priceMap[it.name||'']=String(price);
-    const pe=document.getElementById('price_'+i);if(pe)pe.value=val;
-    total+=price*(Number(it.qty)||0);
+  // 自動 focus 第一個空白的欄位
+  const first = (o.items || []).findIndex((it, i) => {
+    const el = document.getElementById('bp_' + i);
+    return el && !el.value;
   });
-  if(document.getElementById('printOverlay').classList.contains('open'))calcPrintTotal();
-  savePrintPricesToOrder(printOrderIdx,priceMap,total);
+  const focusIdx = first >= 0 ? first : 0;
+  setTimeout(() => { const el = document.getElementById('bp_' + focusIdx); if (el) el.focus(); }, 100);
+}
+
+function closeBatchPrice() {
+  document.getElementById('priceOverlay').classList.remove('open');
+}
+
+function applyBatchPrice() {
+  const o = currentOrders[printOrderIdx];
+  const priceMap = {};
+  let total = 0;
+  (o.items || []).forEach((it, i) => {
+    const bpEl = document.getElementById('bp_' + i);
+    if (!bpEl) return;
+    const val = bpEl.value;
+    const price = parseFloat(val) || 0;
+    if (price > 0) priceMap[it.name || ''] = String(price);
+    // 如果列印 modal 同時開著也同步更新欄位
+    const printEl = document.getElementById('price_' + i);
+    if (printEl) printEl.value = val;
+    total += price * (Number(it.qty) || 0);
+  });
+  if (document.getElementById('printOverlay').classList.contains('open')) {
+    calcPrintTotal();
+  }
+  // ★ 批價確認後立即存回這筆訂單（GAS + 本地）
+  savePrintPricesToOrder(printOrderIdx, priceMap, total);
   closeBatchPrice();
-  renderOrders(currentOrders,document.getElementById('dateInput')?document.getElementById('dateInput').value:'');
+  // 重新渲染以顯示批價合計
+  renderOrders(currentOrders, document.getElementById('dateInput') ? document.getElementById('dateInput').value : '');
 }
 
-// ── 各日訂單總覽 ──
-function showOverview(){
-  document.getElementById('overviewBody').innerHTML='<div class="overview-loading">載入中…</div>';
+function showOverview() {
+  document.getElementById('overviewBody').innerHTML = '<div class="overview-loading">載入中…</div>';
   document.getElementById('overviewOverlay').classList.add('open');
-  fetch(V2_GAS_URL+'?action=dashboard&pwd='+encodeURIComponent(pwd)).then(r=>r.json()).then(data=>{
-    if(data.error){document.getElementById('overviewBody').innerHTML='<div class="overview-loading" style="color:#c0392b;">載入失敗：'+data.error+'</div>';return;}
-    const orders=data.orders||[];
-    const dateMap={};
-    orders.forEach(o=>{const d=o.deliveryDate||'（未知）';if(!dateMap[d])dateMap[d]={active:0,cancelled:0};if(o.status==='cancelled')dateMap[d].cancelled++;else dateMap[d].active++;});
-    const dates=Object.keys(dateMap).sort();
-    if(!dates.length){document.getElementById('overviewBody').innerHTML='<div class="overview-loading">目前沒有任何訂單紀錄</div>';return;}
-    let tA=0,tC=0,rows='';
-    dates.forEach(d=>{const a=dateMap[d].active,c=dateMap[d].cancelled;tA+=a;tC+=c;rows+='<tr onclick="jumpToDate(\''+d+'\')"><td>'+d+'</td><td class="tag-active">'+a+'</td><td class="tag-cancelled">'+(c||'—')+'</td><td>'+(a+c)+'</td></tr>';});
-    rows+='<tr><td>合計</td><td class="tag-active">'+tA+'</td><td class="tag-cancelled">'+(tC||'—')+'</td><td>'+(tA+tC)+'</td></tr>';
-    document.getElementById('overviewBody').innerHTML='<p style="font-size:12px;color:#888;margin:0 0 10px;">點選任一列可切換到該日</p><table class="overview-table"><thead><tr><th>送貨日期</th><th>有效</th><th>已取消</th><th>合計</th></tr></thead><tbody>'+rows+'</tbody></table>';
-  }).catch(()=>{document.getElementById('overviewBody').innerHTML='<div class="overview-loading" style="color:#c0392b;">連線失敗，請檢查網路</div>';});
-}
-function closeOverview(){document.getElementById('overviewOverlay').classList.remove('open');}
-function jumpToDate(date){closeOverview();document.getElementById('dateInput').value=date;loadDashboard(date);}
 
-// ── 刪除當天全部 ──
-function showDeleteDay(){
-  const date=document.getElementById('dateInput').value;
-  document.getElementById('deldayDate').value=date;
-  document.getElementById('deldayPwd').value='';
-  document.getElementById('deldayMsg').textContent='';
+  fetch(V2_GAS_URL + '?action=dashboard&pwd=' + encodeURIComponent(pwd))
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) { document.getElementById('overviewBody').innerHTML = '<div class="overview-loading" style="color:#c0392b;">載入失敗：' + data.error + '</div>'; return; }
+      const orders = data.orders || [];
+
+      // 依送貨日期分組
+      const dateMap = {};
+      orders.forEach(o => {
+        const d = o.deliveryDate || '（未知）';
+        if (!dateMap[d]) dateMap[d] = { active: 0, cancelled: 0 };
+        if (o.status === 'cancelled') dateMap[d].cancelled++;
+        else dateMap[d].active++;
+      });
+
+      const dates = Object.keys(dateMap).sort();
+      if (!dates.length) {
+        document.getElementById('overviewBody').innerHTML = '<div class="overview-loading">目前沒有任何訂單紀錄</div>';
+        return;
+      }
+
+      let totalActive = 0, totalCancelled = 0;
+      let rows = '';
+      dates.forEach(d => {
+        const a = dateMap[d].active, c = dateMap[d].cancelled;
+        totalActive += a; totalCancelled += c;
+        rows += '<tr onclick="jumpToDate(\'' + d + '\')">' +
+          '<td>' + d + '</td>' +
+          '<td class="tag-active">' + a + '</td>' +
+          '<td class="tag-cancelled">' + (c || '—') + '</td>' +
+          '<td>' + (a + c) + '</td>' +
+        '</tr>';
+      });
+      rows += '<tr>' +
+        '<td>合計</td>' +
+        '<td class="tag-active">' + totalActive + '</td>' +
+        '<td class="tag-cancelled">' + (totalCancelled || '—') + '</td>' +
+        '<td>' + (totalActive + totalCancelled) + '</td>' +
+      '</tr>';
+
+      document.getElementById('overviewBody').innerHTML =
+        '<p style="font-size:12px;color:#888;margin:0 0 10px;">點選任一列可切換到該日</p>' +
+        '<table class="overview-table">' +
+          '<thead><tr><th>送貨日期</th><th>有效</th><th>已取消</th><th>合計</th></tr></thead>' +
+          '<tbody>' + rows + '</tbody>' +
+        '</table>';
+    })
+    .catch(() => { document.getElementById('overviewBody').innerHTML = '<div class="overview-loading" style="color:#c0392b;">連線失敗，請檢查網路</div>'; });
+}
+
+function closeOverview() {
+  document.getElementById('overviewOverlay').classList.remove('open');
+}
+
+function jumpToDate(date) {
+  closeOverview();
+  document.getElementById('dateInput').value = date;
+  loadDashboard(date);
+}
+
+function showDeleteDay() {
+  const date = document.getElementById('dateInput').value;
+  document.getElementById('deldayDate').value = date;
+  document.getElementById('deldayPwd').value = '';
+  document.getElementById('deldayMsg').textContent = '';
   updateDeldayWarning();
   document.getElementById('deldayOverlay').classList.add('open');
 }
-function updateDeldayWarning(){
-  const date=document.getElementById('deldayDate').value,wEl=document.getElementById('deldayWarning'),btn=document.querySelector('.delday-submit');
-  if(!date){wEl.innerHTML='請先選擇日期。';btn.disabled=true;btn.style.opacity='0.5';return;}
-  const isSame=date===(document.getElementById('dateInput')?document.getElementById('dateInput').value:'');
-  const cText=isSame?'共 <strong>'+currentOrders.length+'</strong> 筆（含已取消）':'（筆數以實際為準）';
-  wEl.innerHTML='日期：<strong>'+date+'</strong><br>'+cText+' 將被<strong>永久刪除</strong>，無法復原。<br>這跟「取消」不同，連紀錄都會消失。';
-  btn.disabled=false;btn.style.opacity='1';
+
+function updateDeldayWarning() {
+  const date = document.getElementById('deldayDate').value;
+  const warningEl = document.getElementById('deldayWarning');
+  const submitBtn = document.querySelector('.delday-submit');
+  if (!date) {
+    warningEl.innerHTML = '請先選擇日期。';
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.5';
+    return;
+  }
+  // 計算該日訂單數（從 currentOrders 比對，或顯示「需查詢」）
+  const sameDay = currentOrders.filter(o => o.deliveryDate === date);
+  const countText = (date === document.getElementById('dateInput').value)
+    ? '共 <strong>' + currentOrders.length + '</strong> 筆（含已取消）'
+    : '（筆數以實際為準）';
+  warningEl.innerHTML =
+    '日期：<strong>' + date + '</strong><br>' +
+    countText + ' 將被<strong>永久刪除</strong>，無法復原。<br>這跟「取消」不同，連紀錄都會消失。';
+  submitBtn.disabled = false;
+  submitBtn.style.opacity = '1';
 }
-function closeDeleteDay(){document.getElementById('deldayOverlay').classList.remove('open');}
-function submitDeleteDay(){
-  const inputPwd=document.getElementById('deldayPwd').value.trim();
-  const sel=document.getElementById('deldayDate').value;
-  const msgEl=document.getElementById('deldayMsg');
-  if(!sel){msgEl.style.color='#c0392b';msgEl.textContent='請先選擇日期';return;}
-  if(!inputPwd){msgEl.style.color='#c0392b';msgEl.textContent='請輸入密碼';return;}
-  if(inputPwd!==pwd){msgEl.style.color='#c0392b';msgEl.textContent='密碼錯誤';return;}
-  const isSame=sel===(document.getElementById('dateInput')?document.getElementById('dateInput').value:'');
-  const ids=isSame?currentOrders.map(o=>o.orderId):null;
-  msgEl.style.color='#555';msgEl.textContent='查詢中…';
-  const doDelete=(idsToDelete)=>{
-    if(!idsToDelete.length){msgEl.style.color='#888';msgEl.textContent='這天沒有任何訂單';return;}
-    msgEl.textContent='刪除中…';
-    fetch(V2_GAS_URL,{method:'POST',body:JSON.stringify({action:'deleteBatch',ids:idsToDelete,pwd})}).then(r=>r.json()).then(result=>{
-      if(result.error){msgEl.style.color='#c0392b';msgEl.textContent='刪除失敗：'+result.error;return;}
-      closeDeleteDay();loadDashboard(sel);
-    }).catch(()=>{msgEl.style.color='#c0392b';msgEl.textContent='連線失敗，請檢查網路';});
+
+function closeDeleteDay() {
+  document.getElementById('deldayOverlay').classList.remove('open');
+}
+
+function submitDeleteDay() {
+  const inputPwd = document.getElementById('deldayPwd').value.trim();
+  const selectedDate = document.getElementById('deldayDate').value;
+  const msgEl = document.getElementById('deldayMsg');
+  if (!selectedDate) { msgEl.style.color = '#c0392b'; msgEl.textContent = '請先選擇日期'; return; }
+  if (!inputPwd) { msgEl.style.color = '#c0392b'; msgEl.textContent = '請輸入密碼'; return; }
+  if (inputPwd !== pwd) { msgEl.style.color = '#c0392b'; msgEl.textContent = '密碼錯誤'; return; }
+
+  // 如果選的日期就是目前已載入的日期，直接用 currentOrders；否則先查詢
+  const isSameDate = selectedDate === document.getElementById('dateInput').value;
+  const ids = isSameDate ? currentOrders.map(o => o.orderId) : null;
+
+  msgEl.style.color = '#555'; msgEl.textContent = '查詢中…';
+
+  const doDelete = (idsToDelete) => {
+    if (!idsToDelete.length) { msgEl.style.color = '#888'; msgEl.textContent = '這天沒有任何訂單'; return; }
+    msgEl.textContent = '刪除中…';
+
+    fetch(V2_GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'deleteBatch', ids: idsToDelete, pwd: pwd })
+    })
+    .then(r => r.json())
+    .then(result => {
+      if (result.error) { msgEl.style.color = '#c0392b'; msgEl.textContent = '刪除失敗：' + result.error; return; }
+      closeDeleteDay();
+      loadDashboard(selectedDate);
+    })
+    .catch(() => { msgEl.style.color = '#c0392b'; msgEl.textContent = '連線失敗，請檢查網路'; });
   };
-  if(ids){doDelete(ids);}
-  else{
-    fetch(V2_GAS_URL+'?action=dashboard&date='+encodeURIComponent(sel)+'&pwd='+encodeURIComponent(pwd)).then(r=>r.json()).then(data=>{
-      if(data.error){msgEl.style.color='#c0392b';msgEl.textContent='查詢失敗：'+data.error;return;}
-      doDelete((data.orders||[]).map(o=>o.orderId));
-    }).catch(()=>{msgEl.style.color='#c0392b';msgEl.textContent='連線失敗，請檢查網路';});
+
+  if (ids) {
+    doDelete(ids);
+  } else {
+    // 選的是其他日期，先查詢該日訂單
+    fetch(V2_GAS_URL + '?action=dashboard&date=' + encodeURIComponent(selectedDate) + '&pwd=' + encodeURIComponent(pwd))
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) { msgEl.style.color = '#c0392b'; msgEl.textContent = '查詢失敗：' + data.error; return; }
+        doDelete((data.orders || []).map(o => o.orderId));
+      })
+      .catch(() => { msgEl.style.color = '#c0392b'; msgEl.textContent = '連線失敗，請檢查網路'; });
   }
 }
 
-// ── 修改密碼 ──
-function showChangePwd(){
-  ['pwdOld','pwdNew','pwdConfirm'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('pwdMsg').textContent='';
+function showChangePwd() {
+  document.getElementById('pwdOld').value = '';
+  document.getElementById('pwdNew').value = '';
+  document.getElementById('pwdConfirm').value = '';
+  document.getElementById('pwdMsg').textContent = '';
+  document.getElementById('pwdMsg').style.color = '#333';
   document.getElementById('pwdOverlay').classList.add('open');
-  setTimeout(()=>document.getElementById('pwdOld').focus(),100);
-}
-function closeChangePwd(){document.getElementById('pwdOverlay').classList.remove('open');}
-function submitChangePwd(){
-  const oldPwd=document.getElementById('pwdOld').value.trim();
-  const newPwd=document.getElementById('pwdNew').value.trim();
-  const confirm=document.getElementById('pwdConfirm').value.trim();
-  const msgEl=document.getElementById('pwdMsg');
-  if(!oldPwd||!newPwd||!confirm){msgEl.style.color='#c0392b';msgEl.textContent='請填寫所有欄位';return;}
-  if(oldPwd!==pwd){msgEl.style.color='#c0392b';msgEl.textContent='目前密碼錯誤';return;}
-  if(newPwd.length<4){msgEl.style.color='#c0392b';msgEl.textContent='新密碼至少需要 4 個字元';return;}
-  if(newPwd!==confirm){msgEl.style.color='#c0392b';msgEl.textContent='兩次新密碼不一致';return;}
-  msgEl.style.color='#555';msgEl.textContent='送出中…';
-  fetch(V2_GAS_URL,{method:'POST',body:JSON.stringify({action:'changePassword',oldPwd,newPwd})}).then(r=>r.json()).then(data=>{
-    if(data.ok){pwd=newPwd;try{sessionStorage.setItem('yifeng_dashboard_pwd',newPwd);}catch(e){}msgEl.style.color='#15803d';msgEl.textContent='✅ 密碼已成功修改！';setTimeout(()=>closeChangePwd(),1500);}
-    else{msgEl.style.color='#c0392b';msgEl.textContent=data.error||'修改失敗，請再試一次';}
-  }).catch(()=>{msgEl.style.color='#c0392b';msgEl.textContent='連線失敗，請檢查網路';});
+  setTimeout(() => document.getElementById('pwdOld').focus(), 100);
 }
 
-init();
+function closeChangePwd() {
+  document.getElementById('pwdOverlay').classList.remove('open');
+}
+
+function submitChangePwd() {
+  const oldPwd = document.getElementById('pwdOld').value.trim();
+  const newPwd = document.getElementById('pwdNew').value.trim();
+  const confirm = document.getElementById('pwdConfirm').value.trim();
+  const msgEl = document.getElementById('pwdMsg');
+
+  if (!oldPwd || !newPwd || !confirm) {
+    msgEl.style.color = '#c0392b'; msgEl.textContent = '請填寫所有欄位'; return;
+  }
+  if (oldPwd !== pwd) {
+    msgEl.style.color = '#c0392b'; msgEl.textContent = '目前密碼錯誤'; return;
+  }
+  if (newPwd.length < 4) {
+    msgEl.style.color = '#c0392b'; msgEl.textContent = '新密碼至少需要 4 個字元'; return;
+  }
+  if (newPwd !== confirm) {
+    msgEl.style.color = '#c0392b'; msgEl.textContent = '兩次新密碼不一致'; return;
+  }
+
+  msgEl.style.color = '#555'; msgEl.textContent = '送出中…';
+
+  fetch(V2_GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify({ action: 'changePassword', oldPwd: oldPwd, newPwd: newPwd })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.ok) {
+      pwd = newPwd;
+      sessionStorage.setItem('yifeng_dashboard_pwd', newPwd);
+      msgEl.style.color = '#1e8c3a'; msgEl.textContent = '✅ 密碼已成功修改！';
+      setTimeout(() => closeChangePwd(), 1500);
+    } else {
+      msgEl.style.color = '#c0392b';
+      msgEl.textContent = data.error || '修改失敗，請再試一次';
+    }
+  })
+  .catch(() => {
+    msgEl.style.color = '#c0392b'; msgEl.textContent = '連線失敗，請檢查網路';
+  });
+}
+
+if (pwd) loadDashboard(); else renderLogin();
 </script>
 </body>
 </html>

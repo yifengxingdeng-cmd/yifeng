@@ -10,8 +10,8 @@
   :root {
     --green: #15803d; --green-light: #16a34a; --green-pale: #dcfce7;
     --green-bg: #f0fdf4; --accent: #f77f00; --text: #14532d;
-    --text-muted: #64748b; --border: #86efac; --shadow: 0 2px 12px rgba(21,128,61,0.10);
-    --line: #06C755; --blue: #2563eb;
+    --text-muted: #64748b; --border: #86efac; --shadow: 0 2px 12px rgba(30,64,175,0.10);
+    --line: #06C755; --blue: #16a34a;
   }
   body { font-family: 'Noto Sans TC', sans-serif; background: var(--green-bg); color: var(--text); min-height: 100vh; }
   .header { background: var(--green); color: white; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
@@ -34,7 +34,7 @@
   .quick-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
   .quick-btn.history { border-color: var(--green); background: var(--green-bg); }
   .quick-btn.history .label { color: var(--green); }
-  .quick-btn.history.has-data { border-color: var(--green); background: #bbf7d0; font-weight:700; }
+  .quick-btn.history.has-data { border-color: var(--green); background: #86efac; font-weight:700; }
   .quick-btn.quick-order { border-color: #7c3aed; background: #f5f3ff; }
   .quick-btn.quick-order .label { color: #5b21b6; }
   .quick-btn.clear { border-color: #e8b4b0; background: #fdf0ef; }
@@ -119,7 +119,7 @@
   .order-info-box strong { color: var(--green); }
   .order-info-box.yellow-box { background: #fffbeb; border-color: #fcd34d; }
   .order-info-box.yellow-box strong { color: #92400e; }
-  .order-info-box.blue-box { background: #f0fdf4; border-color: #86efac; }
+  .order-info-box.blue-box { background: #f0fdf4; border-color: #bbf7d0; }
   .order-info-box.blue-box strong { color: #15803d; }
   .saved-list { max-height: 300px; overflow-y: auto; }
   .saved-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--green-pale); font-size: 13px; }
@@ -151,7 +151,7 @@
 
 <div class="header">
   <div>
-    <div class="logo">義豐<span>行</span></div>
+    <div class="logo">合豐<span>行</span></div>
     <div class="subtitle">線上下單系統</div>
   </div>
   <button id="pendingBtn" onclick="openPendingOrders()" style="display:none">📋 待確認訂單</button><button class="cart-btn" id="btnCartTop" onclick="openOrderModal()">
@@ -170,8 +170,8 @@
     <input type="date" id="orderDate" style="width:140px" onchange="updateDeliveryDate()">
   </div>
   <div class="field-group">
-    <label style="color:#15803d;font-weight:700">🚚 送貨日期</label>
-    <input type="date" id="deliveryDate" style="width:140px;border-color:#86efac">
+    <label style="color:#16a34a;font-weight:700">🚚 送貨日期</label>
+    <input type="date" id="deliveryDate" style="width:140px;border-color:#bbf7d0">
   </div>
 </div>
 
@@ -205,7 +205,7 @@
       訂單明細 <span id="panelCount">共 0 項</span>
     </div>
     <div class="order-items" id="orderItems">
-      <div class="empty-cart"><div class="icon">🥬</div>尚未加入任何品項</div>
+      <div class="empty-cart"><div class="icon">📦</div>尚未加入任何品項</div>
     </div>
     <div class="panel-footer">
       <div class="total-count">已選 <strong id="totalCount">0</strong> 種品項</div>
@@ -230,7 +230,7 @@
         <div>下單：<strong id="previewDate">-</strong></div>
       </div>
       <div class="preview-header" style="margin-bottom:10px">
-        <div style="color:#15803d;font-weight:700">🚚 送貨：<strong id="previewDelivery">-</strong></div>
+        <div style="color:#16a34a;font-weight:700">🚚 送貨：<strong id="previewDelivery">-</strong></div>
       </div>
       <table class="preview-table">
         <thead><tr><th>編號</th><th>品項名稱</th><th>數量</th><th>單位</th><th>備註</th><th></th></tr></thead>
@@ -240,7 +240,7 @@
     <div class="modal-footer">
       <button class="btn-secondary" onclick="close1('orderOverlay')">關閉</button>
       <button class="btn-line" id="btnSendLine" onclick="openLine()">
-        <svg class="line-icon" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.630 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.630 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        <svg class="line-icon" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
         傳送 LINE
       </button>
     </div>
@@ -335,7 +335,7 @@
 <!-- 新增品項 MODAL -->
 <div class="modal-overlay" id="addItemOverlay">
   <div class="modal" style="max-width:520px">
-    <div class="modal-header" style="background:#15803d;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:16px 16px 0 0">
+    <div class="modal-header" style="background:#0369a1;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:16px 16px 0 0">
       <div>
         <div style="font-weight:700;font-size:15px;color:white">➕ 新增品項 ／ 編輯單位</div>
         <div style="font-size:11px;opacity:0.8;color:white;margin-top:2px">新增品項或為現有品項補充單位</div>
@@ -343,13 +343,13 @@
       <button onclick="closeAddItemModal()" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;padding:0 4px">×</button>
     </div>
     <div class="modal-body" style="padding:14px 16px">
-      <div style="display:flex;gap:4px;margin-bottom:14px;background:#f0fdf4;border-radius:10px;padding:4px">
-        <button id="tabBtnAdd" onclick="switchTab('add')" style="flex:1;padding:6px 4px;border:none;border-radius:8px;font-size:12px;font-family:inherit;font-weight:700;cursor:pointer;background:#15803d;color:white">➕ 新增品項</button>
-        <button id="tabBtnEdit" onclick="switchTab('edit')" style="flex:1;padding:6px 4px;border:none;border-radius:8px;font-size:12px;font-family:inherit;font-weight:700;cursor:pointer;background:transparent;color:#15803d">✏️ 編輯單位</button>
-        <button id="tabBtnFix" onclick="switchTab('fix')" style="flex:1;padding:6px 4px;border:none;border-radius:8px;font-size:12px;font-family:inherit;font-weight:700;cursor:pointer;background:transparent;color:#15803d">🔧 錯字修正</button>
+      <div style="display:flex;gap:4px;margin-bottom:14px;background:#f0f9ff;border-radius:10px;padding:4px">
+        <button id="tabBtnAdd" onclick="switchTab('add')" style="flex:1;padding:6px 4px;border:none;border-radius:8px;font-size:12px;font-family:inherit;font-weight:700;cursor:pointer;background:#0369a1;color:white">➕ 新增品項</button>
+        <button id="tabBtnEdit" onclick="switchTab('edit')" style="flex:1;padding:6px 4px;border:none;border-radius:8px;font-size:12px;font-family:inherit;font-weight:700;cursor:pointer;background:transparent;color:#0369a1">✏️ 編輯單位</button>
+        <button id="tabBtnFix" onclick="switchTab('fix')" style="flex:1;padding:6px 4px;border:none;border-radius:8px;font-size:12px;font-family:inherit;font-weight:700;cursor:pointer;background:transparent;color:#0369a1">🔧 錯字修正</button>
       </div>
       <div id="tabAdd">
-        <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:12px 14px;margin-bottom:12px">
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 14px;margin-bottom:12px">
           <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
             <select id="newItemCat" style="flex:1;min-width:100px;border:1.5px solid var(--border);border-radius:8px;padding:6px 8px;font-size:13px;font-family:inherit;outline:none"></select>
             <input type="text" id="newItemName" placeholder="品項名稱" style="flex:2;min-width:120px;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:13px;font-family:inherit;outline:none">
@@ -358,9 +358,9 @@
             <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">單位（用頓號分隔，例如：件、箱、包）</div>
             <input type="text" id="newItemUnits" placeholder="件、箱、包" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box">
           </div>
-          <button onclick="submitNewItem()" style="width:100%;background:#15803d;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-family:inherit;font-weight:700;cursor:pointer">＋ 加入清單</button>
+          <button onclick="submitNewItem()" style="width:100%;background:#0369a1;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-family:inherit;font-weight:700;cursor:pointer">＋ 加入清單</button>
         </div>
-        <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px">待新增清單 <span id="newItemCount" style="color:#15803d">0</span> 項</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px">待新增清單 <span id="newItemCount" style="color:#0369a1">0</span> 項</div>
         <div id="newItemList" style="max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:8px">
           <div id="newItemEmpty" style="text-align:center;padding:16px;color:var(--text-muted);font-size:12px">尚未新增任何品項</div>
         </div>
@@ -407,7 +407,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeAddItemModal()">取消</button>
-      <button onclick="saveNewItems()" style="flex:1;background:#15803d;color:white;border:none;border-radius:10px;padding:10px;font-size:13px;font-family:inherit;font-weight:700;cursor:pointer">💾 確認儲存</button>
+      <button onclick="saveNewItems()" style="flex:1;background:#0369a1;color:white;border:none;border-radius:10px;padding:10px;font-size:13px;font-family:inherit;font-weight:700;cursor:pointer">💾 確認儲存</button>
     </div>
   </div>
 </div>
@@ -965,7 +965,7 @@ const PRODUCTS = {
 
 // ★ 部署好新的 Apps Script 後，把網址貼在這裡
 const V2_GAS_URL = 'https://script.google.com/macros/s/AKfycbz3lQIEATx7e4Cbcw0gC6o3dbCBnIpMf9Bt5U5eXEHCZzjLbBRITKnpw2veMwuepdfq3w/exec';
-const FRONTEND_VERSION = 'v1.0-義豐行-2026-09-03';
+const FRONTEND_VERSION = 'v1.1-義豐行-2026-09-16';
 
 const LS_CART     = 'yifeng_cart';
 const LS_CUSTOMER = 'yifeng_customer';
@@ -1054,7 +1054,7 @@ function checkOnPageOpen() {
 
 function loadOrderForEdit(id) {
   showV2Banner('loading', '正在載入您的訂單…');
-  fetch(V2_GAS_URL + '?action=getOrder&id=' + encodeURIComponent(id))
+  fetch(V2_GAS_URL + '?action=order&id=' + encodeURIComponent(id))
     .then(r => r.json())
     .then(data => {
       if (data.error) {
@@ -1202,7 +1202,7 @@ function showV2Banner(kind, text) {
     anchor.parentNode.insertBefore(el, anchor.nextSibling);
   }
   const colors = {
-    loading: ['#f0fdf4', '#15803d'], editing: ['#dcfce7','#15803d'], new: ['#dcfce7','#15803d'],
+    loading: ['#eef', '#446'], editing: ['#dcfce7','#15803d'], new: ['#e7f5ff','#1864ab'],
     locked: ['#fff3cd','#856404'], error: ['#f8d7da','#842029']
   };
   const c = colors[kind] || colors.new;
@@ -1359,7 +1359,7 @@ function updatePanel() {
   document.getElementById('panelCount').textContent=`共 ${count} 項`;
   document.getElementById('totalCount').textContent=count;
   const container=document.getElementById('orderItems');
-  if (!count) { container.innerHTML=`<div class="empty-cart"><div class="icon">🥬</div>尚未加入任何品項</div>`; return; }
+  if (!count) { container.innerHTML=`<div class="empty-cart"><div class="icon">📦</div>尚未加入任何品項</div>`; return; }
   container.innerHTML=items.map(([name,{qty,unit,note}])=>`
     <div class="order-item">
       <div>
@@ -1527,6 +1527,7 @@ function openOrderModal() {
 
 // ── LINE 傳送 ─────────────────────────────────────
 function openLine() {
+  // 防止重複點擊（同舊版邏輯）
   if (window._isSendingOrder) return;
   window._isSendingOrder = true;
 
@@ -1563,38 +1564,41 @@ function openLine() {
       const editUrl = window.location.origin + window.location.pathname + '?edit=' + orderId;
       msg += '📝 點此修改訂單：\n' + editUrl + '\n';
     }
+    // ★ 清空購物車（下單成功後重置）
+    cart = {};
+    editingOrderId = null;
+    autoSave();
+    renderProducts();
+    updatePanel();
+    // ★ 用 location.href 跳轉（手機不會白畫面，LINE app 接管後按返回可回頁面）
     window.location.href = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
-    // 跳轉 LINE 後清空購物車（500ms 後執行，確保導向已觸發）
-    setTimeout(() => {
-      cart = {};
-      editingOrderId = '';
-      renderProducts();
-      updatePanel();
-      closeModal('orderModal');
-      releaseLock();
-    }, 500);
+    setTimeout(releaseLock, 3000);
   });
 }
 
 function submitToBackend(customer, orderDate, deliveryDate, items, callback) {
   const itemsData = items.map(([name, {qty, unit, note}]) => ({name, qty, unit, note: note||''}));
-  // ⚠️ 不可加 Content-Type: application/json（會觸發 CORS preflight，GAS 靜默封鎖）
-  const payload = editingOrderId
-    ? { action: 'updateOrder', orderId: editingOrderId, items: itemsData, notes: '' }
-    : { action: 'saveOrder', customer, orderDate, deliveryDate, items: itemsData, notes: '' };
   fetch(V2_GAS_URL, {
     method: 'POST',
-    body: JSON.stringify(payload)
+    body: JSON.stringify({
+      action: 'save',
+      id: editingOrderId || '',
+      customer: customer,
+      orderDate: orderDate,
+      deliveryDate: deliveryDate,
+      items: itemsData
+    })
   })
   .then(r => r.json())
   .then(result => {
     if (result.error) { alert('儲存失敗：' + result.error); return; }
-    if (result.orderId) editingOrderId = result.orderId;
+    if (result.id) editingOrderId = result.id;
     saveHistory();
     localStorage.setItem('lastOrder', JSON.stringify(cart));
-    if (callback) callback(result.orderId || '');
+    if (callback) callback(result.id || '');
   })
   .catch(() => {
+    // 即使後端失敗，還是繼續傳LINE
     saveHistory();
     localStorage.setItem('lastOrder', JSON.stringify(cart));
     if (callback) callback('');
@@ -1619,9 +1623,10 @@ function getAllProductNames() {
 }
 
 function loadRuntimeProducts() {
+  // 從 localStorage 載入自訂品項（管理員可透過 Excel 上傳覆蓋）
   try {
     const saved = localStorage.getItem(LS_PRODUCTS);
-    if (saved) JSON.parse(saved);
+    if (saved) JSON.parse(saved); // 只做格式驗證
   } catch(e) { localStorage.removeItem(LS_PRODUCTS); }
 }
 
@@ -1636,6 +1641,7 @@ function openAddItemModal() {
   pendingNewItems = []; pendingEdits = []; pendingFixes = [];
   editingItem = null; fixingItem = null;
   updateNewItemCount();
+  // 填入分類選項
   const sel = document.getElementById('newItemCat');
   sel.innerHTML = Object.keys(getActiveProducts()).map(c => `<option value="${c}">${c}</option>`).join('');
   switchTab('add');
@@ -1648,7 +1654,7 @@ function switchTab(tab) {
   ['add','edit','fix'].forEach(t => {
     document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = t===tab?'block':'none';
     const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
-    if (btn) { btn.style.background = t===tab?'#15803d':'transparent'; btn.style.color = t===tab?'white':'#15803d'; }
+    if (btn) { btn.style.background = t===tab?'#0369a1':'transparent'; btn.style.color = t===tab?'white':'#0369a1'; }
   });
 }
 
@@ -1752,6 +1758,7 @@ function submitFix() {
 function saveNewItems() {
   const products = JSON.parse(JSON.stringify(getActiveProducts()));
 
+  // 套用新增品項
   pendingNewItems.forEach(({cat, name, units}) => {
     if (!products[cat]) products[cat] = [];
     const existing = products[cat].findIndex(([n]) => n === name);
@@ -1759,6 +1766,7 @@ function saveNewItems() {
     else products[cat].push([name, units]);
   });
 
+  // 套用單位編輯
   pendingEdits.forEach(({name, units}) => {
     for (const items of Object.values(products)) {
       const idx = items.findIndex(([n]) => n === name);
@@ -1766,11 +1774,13 @@ function saveNewItems() {
     }
   });
 
+  // 套用錯字修正
   pendingFixes.forEach(({oldName, newName}) => {
     for (const items of Object.values(products)) {
       const idx = items.findIndex(([n]) => n === oldName);
       if (idx >= 0) items[idx][0] = newName;
     }
+    // 同步更新購物車
     if (cart[oldName]) { cart[newName] = cart[oldName]; delete cart[oldName]; }
   });
 
