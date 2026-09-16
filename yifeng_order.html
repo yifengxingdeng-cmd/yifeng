@@ -964,7 +964,12 @@ const PRODUCTS = {
 // ══════════════════════════════════════════════════════════════
 
 // ★ 部署好新的 Apps Script 後，把網址貼在這裡
-const V2_GAS_URL = '★請填入義豐行GAS網址★';
+let V2_GAS_URL = '';
+try { V2_GAS_URL = localStorage.getItem('yf_gas_url') || ''; } catch(e) {}
+if (!V2_GAS_URL) {
+  V2_GAS_URL = prompt('請輸入義豐行 GAS 網址：') || '';
+  if (V2_GAS_URL) { try { localStorage.setItem('yf_gas_url', V2_GAS_URL); } catch(e) {} }
+}
 const FRONTEND_VERSION = 'v1.0-義豐行-2026-09-03';
 
 const LS_CART     = 'yifeng_cart';
