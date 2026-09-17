@@ -57,6 +57,8 @@
   .product-card { background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 8px; text-align: center; transition: all 0.15s; position: relative; }
   .product-card:hover { border-color: var(--green-light); box-shadow: var(--shadow); }
   .product-card.has-qty { border-color: var(--green); background: var(--green-bg); }
+  .product-card.suspended { opacity: 0.55; background: #f5f5f5; border-color: #d0d0d0; pointer-events: none; }
+  .susp-label { display: inline-block; margin-top: 4px; font-size: 10px; color: #999; background: #ececec; border-radius: 4px; padding: 1px 6px; letter-spacing: 0.5px; }
   .product-name { font-size: 13px; font-weight: 500; margin-bottom: 8px; line-height: 1.3; }
   .qty-controls { display: flex; align-items: center; justify-content: center; gap: 4px; }
   .qty-btn { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); background: white; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--green); transition: all 0.15s; font-family: inherit; flex-shrink: 0; }
@@ -965,7 +967,7 @@ const PRODUCTS = {
 
 // ★ 部署好新的 Apps Script 後，把網址貼在這裡
 const V2_GAS_URL = 'https://script.google.com/macros/s/AKfycbz3lQIEATx7e4Cbcw0gC6o3dbCBnIpMf9Bt5U5eXEHCZzjLbBRITKnpw2veMwuepdfq3w/exec';
-const FRONTEND_VERSION = 'v1.1-義豐行-2026-09-16';
+const FRONTEND_VERSION = 'v1.2-義豐行-2026-09-17';
 
 const LS_CART     = 'yifeng_cart';
 const LS_CUSTOMER = 'yifeng_customer';
@@ -975,6 +977,7 @@ const LS_PRODUCTS = 'yifeng_products';
 let cart = {};
 let activeCategory = '全部';
 let editingOrderId = null;
+let suspendedItems = new Set();  // 暫停供應品項名稱集合
 
 let _splashMinTimePassed = false;
 setTimeout(() => { _splashMinTimePassed = true; tryHideSplash(); }, 500);
@@ -997,6 +1000,17 @@ function init() {
   v.textContent = '前端 ' + FRONTEND_VERSION;
   document.body.appendChild(v);
   fetch(V2_GAS_URL + '?action=ping').then(r=>r.json()).then(d=>{ v.textContent += ' ／ 後端 ' + (d.version||'未知'); }).catch(()=>{ v.textContent += ' ／ 後端連線失敗'; });
+
+  // 載入暫停品項清單（不影響主流程，背景靜默更新）
+  fetch(V2_GAS_URL + '?action=getSuspended')
+    .then(r => r.json())
+    .then(d => {
+      if (d.ok && Array.isArray(d.suspended)) {
+        suspendedItems = new Set(d.suspended);
+        if (suspendedItems.size > 0) renderProducts();  // 有暫停品項才重繪
+      }
+    })
+    .catch(() => {});  // 網路失敗不影響下單功能
 
   document.getElementById('orderDate').value = new Date().toISOString().split('T')[0];
   updateDeliveryDate();
@@ -1282,24 +1296,33 @@ function renderProducts() {
     const grid = document.createElement('div');
     grid.className = 'product-grid';
     items.forEach(([name, units]) => {
+      const isSusp = suspendedItems.has(name);
       const inCart = cart[name];
       const qty = inCart ? inCart.qty : 0;
       const unit = inCart ? inCart.unit : units[0];
       const card = document.createElement('div');
-      card.className = `product-card${qty > 0 ? ' has-qty' : ''}`;
+      card.className = `product-card${qty > 0 ? ' has-qty' : ''}${isSusp ? ' suspended' : ''}`;
       card.id = getCardId(name);
-      card.innerHTML = `
-        <div class="qty-badge">${qty||''}</div>
-        <div class="product-name">${name}</div>
-        <div class="qty-controls">
-          <button class="qty-btn" onclick="changeQty('${name}',-1)">−</button>
-          <input class="qty-input" type="number" min="0" value="${qty||''}" placeholder="0"
-            onchange="setQty('${name}',this.value)" oninput="setQty('${name}',this.value)" onclick="this.select()">
-          <button class="qty-btn" onclick="changeQty('${name}',1)">＋</button>
-        </div>
-        <select class="unit-select" onchange="changeUnit('${name}',this.value)" onclick="event.stopPropagation()">
-          ${units.map(u=>`<option value="${u}" ${u===unit?'selected':''}>${u}</option>`).join('')}
-        </select>`;
+      if (isSusp) {
+        card.innerHTML = `
+          <div class="product-name">${name}</div>
+          <div class="qty-controls" style="justify-content:center;">
+            <span class="susp-label">暫停供應</span>
+          </div>`;
+      } else {
+        card.innerHTML = `
+          <div class="qty-badge">${qty||''}</div>
+          <div class="product-name">${name}</div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="changeQty('${name}',-1)">−</button>
+            <input class="qty-input" type="number" min="0" value="${qty||''}" placeholder="0"
+              onchange="setQty('${name}',this.value)" oninput="setQty('${name}',this.value)" onclick="this.select()">
+            <button class="qty-btn" onclick="changeQty('${name}',1)">＋</button>
+          </div>
+          <select class="unit-select" onchange="changeUnit('${name}',this.value)" onclick="event.stopPropagation()">
+            ${units.map(u=>`<option value="${u}" ${u===unit?'selected':''}>${u}</option>`).join('')}
+          </select>`;
+      }
       grid.appendChild(card);
     });
     sec.appendChild(grid);

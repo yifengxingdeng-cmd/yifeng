@@ -154,6 +154,26 @@
   .price-input:focus { outline:none; border-color:#0d6efd; }
   .price-confirm { display:block; width:100%; margin-top:16px; padding:12px; background:#0d6efd; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; flex-shrink:0; }
   .price-info { background:#f0fdf4; border-radius:8px; padding:8px 12px; font-size:13px; color:#15803d; margin-bottom:12px; }
+  /* 品項管理 modal */
+  .susp-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:400; align-items:center; justify-content:center; }
+  .susp-overlay.open { display:flex; }
+  .susp-box { background:white; border-radius:16px; width:92%; max-width:420px; max-height:88vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
+  .susp-header { background:#15803d; color:white; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+  .susp-header h2 { margin:0; font-size:16px; }
+  .susp-close { background:none; border:none; color:white; font-size:22px; cursor:pointer; padding:0 4px; }
+  .susp-body { overflow-y:auto; padding:16px; }
+  .susp-info { background:#fefce8; border:1.5px solid #fde68a; border-radius:8px; padding:10px 14px; font-size:13px; color:#92400e; margin-bottom:14px; line-height:1.6; }
+  .susp-add-row { display:flex; gap:8px; margin-bottom:14px; }
+  .susp-add-row input { flex:1; border:1.5px solid #86efac; border-radius:8px; padding:9px 12px; font-size:14px; }
+  .susp-add-row input:focus { outline:none; border-color:#15803d; }
+  .susp-add-btn { padding:9px 16px; background:#15803d; color:white; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; white-space:nowrap; }
+  .susp-list-title { font-size:13px; font-weight:600; color:#555; margin-bottom:8px; }
+  .susp-tags { display:flex; flex-wrap:wrap; gap:8px; min-height:36px; }
+  .susp-tag { display:flex; align-items:center; gap:6px; background:#fee2e2; color:#991b1b; border:1.5px solid #fca5a5; border-radius:20px; padding:5px 12px; font-size:13px; font-weight:600; }
+  .susp-tag-x { background:none; border:none; color:#991b1b; font-size:16px; cursor:pointer; padding:0; line-height:1; }
+  .susp-empty { color:#aaa; font-size:13px; padding:8px 0; }
+  .susp-save { display:block; width:100%; margin-top:18px; padding:12px; background:#15803d; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; flex-shrink:0; }
+  .susp-msg { margin-top:10px; font-size:13px; text-align:center; }
 </style>
 </head>
 <body>
@@ -219,6 +239,27 @@
   </div>
 </div>
 
+<!-- 品項管理 Modal -->
+<div class="susp-overlay" id="suspOverlay" onclick="if(event.target===this)closeSuspMgmt()">
+  <div class="susp-box">
+    <div class="susp-header">
+      <h2>⏸️ 品項管理（暫停供應）</h2>
+      <button class="susp-close" onclick="closeSuspMgmt()">×</button>
+    </div>
+    <div class="susp-body">
+      <div class="susp-info">⚠️ 加入暫停清單後，客戶的下單頁該品項會顯示為置灰「暫停供應」，無法加入購物車。</div>
+      <div class="susp-add-row">
+        <input type="text" id="suspInput" placeholder="輸入品項名稱（如：空心菜）" onkeydown="if(event.key==='Enter')addSuspItem()" />
+        <button class="susp-add-btn" onclick="addSuspItem()">＋ 加入</button>
+      </div>
+      <div class="susp-list-title">目前暫停供應品項：</div>
+      <div class="susp-tags" id="suspTags"></div>
+      <button class="susp-save" onclick="saveSuspended()">✅ 儲存</button>
+      <div class="susp-msg" id="suspMsg"></div>
+    </div>
+  </div>
+</div>
+
 <!-- 修改密碼 Modal -->
 <div class="pwd-overlay" id="pwdOverlay" onclick="if(event.target===this)closeChangePwd()">
   <div class="pwd-box">
@@ -269,7 +310,7 @@
 <script>
 // ★ 部署好新的 Apps Script 後，把網址貼在這裡（跟 order.html 用同一個）
 const V2_GAS_URL = 'https://script.google.com/macros/s/AKfycbz3lQIEATx7e4Cbcw0gC6o3dbCBnIpMf9Bt5U5eXEHCZzjLbBRITKnpw2veMwuepdfq3w/exec';
-const FRONTEND_VERSION = 'v2.17-義豐行-2026-09-11';
+const FRONTEND_VERSION = 'v2.18-義豐行-2026-09-17';
 
 fetch(V2_GAS_URL + '?action=ping').then(r=>r.json()).then(d=>{
   const el = document.createElement('div');
@@ -329,6 +370,7 @@ function renderOrders(orders, date) {
         '<button onclick="closeToolbarMenu();showStats()">📊 品項統計</button>' +
         '<button onclick="closeToolbarMenu();exportExcel(event)">📥 匯出Excel</button>' +
         '<button onclick="closeToolbarMenu();showOverview()">📅 各日總覽</button>' +
+        '<button onclick="closeToolbarMenu();showSuspMgmt()">⏸️ 品項管理</button>' +
         '<button class="menu-danger" onclick="closeToolbarMenu();showDeleteDay()">🗑️ 刪除當天全部</button>' +
         '<button onclick="closeToolbarMenu();showChangePwd()">🔑 修改密碼</button>' +
       '</div>' +
@@ -1145,6 +1187,83 @@ function submitDeleteDay() {
       })
       .catch(() => { msgEl.style.color = '#c0392b'; msgEl.textContent = '連線失敗，請檢查網路'; });
   }
+}
+
+// ── 品項管理（暫停供應）────────────────────────────────────
+var suspList = [];  // 目前暫停品項名稱陣列
+
+function showSuspMgmt() {
+  document.getElementById('suspMsg').textContent = '';
+  document.getElementById('suspInput').value = '';
+  document.getElementById('suspOverlay').classList.add('open');
+  renderSuspTags();
+  // 從 GAS 載入最新暫停清單
+  fetch(V2_GAS_URL + '?action=getSuspended')
+    .then(r => r.json())
+    .then(d => {
+      if (d.ok) { suspList = d.suspended || []; renderSuspTags(); }
+    })
+    .catch(() => {});
+}
+
+function closeSuspMgmt() {
+  document.getElementById('suspOverlay').classList.remove('open');
+}
+
+function renderSuspTags() {
+  const wrap = document.getElementById('suspTags');
+  if (!suspList.length) {
+    wrap.innerHTML = '<span class="susp-empty">目前沒有暫停品項</span>';
+    return;
+  }
+  wrap.innerHTML = suspList.map((name, i) =>
+    '<span class="susp-tag">' + escapeHtml(name) +
+    '<button class="susp-tag-x" onclick="removeSuspItem(' + i + ')">×</button></span>'
+  ).join('');
+}
+
+function addSuspItem() {
+  const inp = document.getElementById('suspInput');
+  const name = inp.value.trim();
+  if (!name) return;
+  if (suspList.includes(name)) {
+    inp.value = '';
+    document.getElementById('suspMsg').textContent = '「' + name + '」已在清單中';
+    document.getElementById('suspMsg').style.color = '#888';
+    return;
+  }
+  suspList.push(name);
+  inp.value = '';
+  document.getElementById('suspMsg').textContent = '';
+  renderSuspTags();
+  inp.focus();
+}
+
+function removeSuspItem(idx) {
+  suspList.splice(idx, 1);
+  renderSuspTags();
+}
+
+function saveSuspended() {
+  const msg = document.getElementById('suspMsg');
+  msg.style.color = '#888';
+  msg.textContent = '儲存中…';
+  const body = JSON.stringify({ action: 'setSuspended', pwd: pwd, suspended: suspList });
+  fetch(V2_GAS_URL, { method: 'POST', body: body })
+    .then(r => r.json())
+    .then(d => {
+      if (d.ok) {
+        msg.style.color = '#15803d';
+        msg.textContent = '✅ 已儲存！共 ' + (d.count || 0) + ' 個暫停品項。下單頁下次開啟時生效。';
+      } else {
+        msg.style.color = '#c0392b';
+        msg.textContent = '❌ 儲存失敗：' + (d.error || '未知錯誤');
+      }
+    })
+    .catch(() => {
+      msg.style.color = '#c0392b';
+      msg.textContent = '❌ 網路錯誤，請再試一次';
+    });
 }
 
 function showChangePwd() {
