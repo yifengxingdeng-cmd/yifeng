@@ -157,23 +157,34 @@
   /* 品項管理 modal */
   .susp-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:400; align-items:center; justify-content:center; }
   .susp-overlay.open { display:flex; }
-  .susp-box { background:white; border-radius:16px; width:92%; max-width:420px; max-height:88vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
+  .susp-box { background:white; border-radius:16px; width:92%; max-width:440px; max-height:88vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
   .susp-header { background:#15803d; color:white; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
   .susp-header h2 { margin:0; font-size:16px; }
   .susp-close { background:none; border:none; color:white; font-size:22px; cursor:pointer; padding:0 4px; }
-  .susp-body { overflow-y:auto; padding:16px; }
-  .susp-info { background:#fefce8; border:1.5px solid #fde68a; border-radius:8px; padding:10px 14px; font-size:13px; color:#92400e; margin-bottom:14px; line-height:1.6; }
-  .susp-add-row { display:flex; gap:8px; margin-bottom:14px; }
-  .susp-add-row input { flex:1; border:1.5px solid #86efac; border-radius:8px; padding:9px 12px; font-size:14px; }
-  .susp-add-row input:focus { outline:none; border-color:#15803d; }
-  .susp-add-btn { padding:9px 16px; background:#15803d; color:white; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; white-space:nowrap; }
-  .susp-list-title { font-size:13px; font-weight:600; color:#555; margin-bottom:8px; }
-  .susp-tags { display:flex; flex-wrap:wrap; gap:8px; min-height:36px; }
-  .susp-tag { display:flex; align-items:center; gap:6px; background:#fee2e2; color:#991b1b; border:1.5px solid #fca5a5; border-radius:20px; padding:5px 12px; font-size:13px; font-weight:600; }
-  .susp-tag-x { background:none; border:none; color:#991b1b; font-size:16px; cursor:pointer; padding:0; line-height:1; }
-  .susp-empty { color:#aaa; font-size:13px; padding:8px 0; }
-  .susp-save { display:block; width:100%; margin-top:18px; padding:12px; background:#15803d; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; flex-shrink:0; }
-  .susp-msg { margin-top:10px; font-size:13px; text-align:center; }
+  .susp-toolbar { display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid #e8e8e8; flex-shrink:0; background:#fafafa; }
+  .susp-cat-sel { flex:1; border:1.5px solid #86efac; border-radius:8px; padding:8px 10px; font-size:14px; font-family:inherit; background:white; cursor:pointer; color:#15803d; font-weight:600; }
+  .susp-cat-sel:focus { outline:none; border-color:#15803d; }
+  .susp-count-badge { white-space:nowrap; font-size:12px; background:#fee2e2; color:#991b1b; border-radius:12px; padding:3px 10px; font-weight:700; }
+  .susp-list { flex:1; overflow-y:auto; padding:4px 0; }
+  .susp-row { display:flex; align-items:center; justify-content:space-between; padding:11px 18px; border-bottom:1px solid #f5f5f5; transition:background 0.1s; }
+  .susp-row:last-child { border-bottom:none; }
+  .susp-row:hover { background:#fafafa; }
+  .susp-row.is-susp { background:#fff5f5; }
+  .susp-name { font-size:14px; color:#333; }
+  .susp-row.is-susp .susp-name { color:#c0392b; font-weight:600; }
+  .susp-hint { font-size:11px; color:#bbb; margin-left:6px; }
+  /* toggle switch */
+  .tog { position:relative; width:46px; height:26px; flex-shrink:0; }
+  .tog input { display:none; }
+  .tog-slider { position:absolute; inset:0; background:#d0d0d0; border-radius:13px; cursor:pointer; transition:background 0.2s; }
+  .tog-slider:before { content:''; position:absolute; width:20px; height:20px; left:3px; top:3px; background:white; border-radius:50%; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+  .tog input:checked + .tog-slider { background:#e74c3c; }
+  .tog input:checked + .tog-slider:before { transform:translateX(20px); }
+  .susp-cat-title { padding:8px 18px 4px; font-size:11px; font-weight:700; color:#15803d; letter-spacing:1px; background:#f0fdf4; text-transform:uppercase; }
+  .susp-empty-tip { padding:30px; text-align:center; color:#aaa; font-size:13px; }
+  .susp-footer { padding:12px 16px; border-top:1px solid #e8e8e8; flex-shrink:0; }
+  .susp-save { display:block; width:100%; padding:12px; background:#15803d; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; }
+  .susp-msg { margin-top:8px; font-size:13px; text-align:center; min-height:18px; }
 </style>
 </head>
 <body>
@@ -246,15 +257,15 @@
       <h2>⏸️ 品項管理（暫停供應）</h2>
       <button class="susp-close" onclick="closeSuspMgmt()">×</button>
     </div>
-    <div class="susp-body">
-      <div class="susp-info">⚠️ 加入暫停清單後，客戶的下單頁該品項會顯示為置灰「暫停供應」，無法加入購物車。</div>
-      <div class="susp-add-row">
-        <input type="text" id="suspInput" placeholder="輸入品項名稱（如：空心菜）" onkeydown="if(event.key==='Enter')addSuspItem()" />
-        <button class="susp-add-btn" onclick="addSuspItem()">＋ 加入</button>
-      </div>
-      <div class="susp-list-title">目前暫停供應品項：</div>
-      <div class="susp-tags" id="suspTags"></div>
-      <button class="susp-save" onclick="saveSuspended()">✅ 儲存</button>
+    <div class="susp-toolbar">
+      <select class="susp-cat-sel" id="suspCatSel" onchange="renderSuspList()">
+        <option value="">全部分類</option>
+      </select>
+      <span class="susp-count-badge" id="suspCountBadge">暫停 0 項</span>
+    </div>
+    <div class="susp-list" id="suspList"></div>
+    <div class="susp-footer">
+      <button class="susp-save" onclick="saveSuspended()">✅ 儲存變更</button>
       <div class="susp-msg" id="suspMsg"></div>
     </div>
   </div>
@@ -1190,68 +1201,85 @@ function submitDeleteDay() {
 }
 
 // ── 品項管理（暫停供應）────────────────────────────────────
-var suspList = [];  // 目前暫停品項名稱陣列
+var suspSet = new Set();   // 目前暫停品項名稱集合
+var suspLoaded = false;
+
+// 全品項清單（與下單頁 PRODUCTS 同步）
+var ALL_PRODUCTS = {"葉菜類":["空心菜","龍鬚菜","白杏菜","紅杏菜","青江菜","俄白菜","小白菜","小松菜","甜介菜","菠菜","皇宮菜","散地瓜葉","阿里山地瓜葉","大陸妹","大芥菜","芥仁","韭黃","高麗菜","進口大白菜","包心白菜","芥藍菜","青花菜","白花菜","進口高麗菜","水蓮","小包娃娃菜","高山娃娃菜","山茼萵","茼萵菜","韭菜花","紅菜","A菜","紫高麗","山蘇","廣東A","綠卷鬚","紅卷鬚","油菜","台灣大白菜","美生菜","羅曼","蘭花","巴西里","川七","百里香","奶油白菜"],"瓜果類":["綠苦瓜","白苦瓜","大黃瓜","小黃瓜","茄子","甜玉米","蒲阿","甜豆","荷蘭豆","長豆","四季豆","節瓜","絲瓜","秋葵","芋頭","西洋芹","筊白筍","盒裝玉米筍","帶殼玉米筍","白蘿蔔","紅蘿蔔","馬鈴薯","冬瓜","洋蔥","紫洋蔥","竹筍","桂竹筍","青椒","紅彩椒","黃彩椒","菜心","粉豆","蘆筍","牛蒡","山藥","日本山藥","綠竹筍","蓮藕片","牛蕃茄","木型南瓜","進口白蘿蔔","整支蓮藕","東昇南瓜","青木瓜","栗籽南瓜","洋薯","山苦瓜","紅肉地瓜","黃肉地瓜","檸檬","皇帝豆","去皮芋頭","去皮玉米","佛手瓜","5斤箱裝玉米筍"],"香料類":["香菜","九層塔","蒜仁","蒜末","蒜泥","蒜片","薑絲","粗薑絲","嫩薑","老薑","紅蔥絞末","薑泥","薑片","帶皮蒜頭","小辣切圈","小辣絞末","大辣切圈","大辣絞末","小辣椒","大辣椒","糯米椒","青辣椒","蔥","芹菜","蒜苗","芹菜管","蔥花","紅蔥頭","細蒜末","紅蔥頭碎","整顆蒜頭","紅蔥泥","去葉芹菜","大顆蒜仁"],"香菇類":["便宜菇頭","漂亮菇頭","杏包菇C","小包金針菇","秀珍菇","包裝鴻喜菇","包裝美白菇","漂亮中菇","木耳","洋菇","苜蓿芽","豆苗","珊瑚菇","白精靈","草菇","鮑魚菇","漂亮小菇","杏鮑菇B","便宜香菇(便當用)","金針菇B","金針菇A","散鴻喜菇","散美白菇","川耳","小木耳","杏鮑菇","連子","枸己","紅棗"],"水果類":["水果木瓜","龍眼","荔枝","榴槤","櫻桃","哈密瓜","桶柑","香蕉","芭樂","柳丁","蘋果","台灣葡萄","小蕃茄","紅火龍果","大西瓜","鳳梨","香瓜","茂谷","小玉西瓜","紅肉西瓜","白火龍果","小蘋果","大蘋果","綠葡萄","無籽葡萄","水梨","青芒果","愛文芒果","綠奇異果","黃金奇異果","金吉","藍莓","萊姆","梅粉包","酪梨","草莓","青蘋果","紅寶石奇異果","紅地球葡萄"],"豆干類":["豆干丁","小黃豆干","五香干","手工豆干","板豆腐","白干絲","四角油豆腐","麵腸","素雞","素肚","藍花干","豆結","中華豆腐","雞蛋豆腐","中華家常","百頁豆腐","大黑豆干","豆包","豆腸","炸豆包","中港豆腐","百葉丁","臭豆腐","花干","台一豆腐","巾泡","蒟蒻結","3斤乾豆皮","黃干絲","豆干切片","碎豆干","三角油豆腐","小三角油豆腐","小四角油豆腐","盒裝豆腐","大漢豆腐","麵腸切片","素雞切片","文瑞百葉","漂亮板豆腐","中華板豆腐","大漢板豆腐","生豆皮","豆花花生","水果愛玉","大米血","小米血","甜不辣條","甜不辣切","甜不辣片","福茂大貢丸","福茂小貢丸"],"醃製類":["豬血","鴨血","酸菜絲","酸菜心","長酸菜","酸菜心切","木耳絲","酸白菜","榨菜絲","梅干菜","榨菜粒","筍絲","桶筍絲","珍珠鋪","菜鋪","醃瓜切片","包裝酸菜","雪裡紅","醃黃蘿蔔","玉筍","海帶籤","海帶結","海帶根","海帶絲","海龍","小海帶結","筍片","筍干","脆筍絲","脆筍片","脆花瓜","碎花瓜","雞肝"],"冷凍商品":["素丸子","素魚","素肉絲","素雞腿","三色豆","玉米粒","毛豆仁","油雞腿","小肉羹","虱目魚丸","蝦捲","雞捲","T6雞腿","T7雞腿","去骨雞腿","馬K丁","紅K丁","芋頭丁","小貢丸","大貢丸","小魚丸","鱈魚丸","雞腿排","凍青花","凍白花","凍四季豆","王記豬腳","米腸","芋籤","魚板","鑫鑫腸","小蝦丸","芋頭角","發泡魷魚","冷凍棒棒腿","黑輪丁","黑輪條","香腸片","貢丸片","水晶角","青豆仁","魚板絲","木蘭魚丸","鹹豬肉","水餃","素佛跳牆","牛肉丸","鹹鯖魚","冷凍三節翅","花枝丸","火腿丁","蟹味棒","素肉羹","鴨肉丸"],"肉類":["香腸","去骨雞腿肉","雞心","雞胗","二節翅","翅小腿","雞腿肉切小塊","雞胸肉","雞胸肉帶骨","雞屁股","雞骨頭","五花肉","梅花肉","前腿肉","絞肉","肉絲","豬大骨","排骨","豬蹄","蹄膀","牛肉絲","里肌肉","帶骨豬排","豬耳朵","大肝連","後腿肉","豬肉塊","豬肝","豬背油","控肉丁","豬肉片","松阪豬","三層肉","鴨胗","嘴邊肉","鴨胸肉","全鴨","全鵝","棒棒腿"],"麵品類":["冬粉","麵線","紅麵線","粄條","粿仔條","細油麵","粗油麵","米苔目","粉粿","豆簽麵","白油麵","麵疙瘩","米粉","蘿蔔糕","全鋐粄條","水餃皮","餛飩皮","烏龍麵","意麵","雞絲麵","紫芋饅頭","黑糖饅頭","牛奶饅頭","雜糧饅頭","銀絲捲","豆沙捲","豆沙包","蔥花捲","陽春麵"],"海鮮類":["盒裝翡翠","小蛤蠣","大蛤蠣","秋刀魚","盒裝蝦子","殺清鱸魚","殺清石斑","魚下巴","鯛魚片","鳥蛋","馬吉","烏蔘","鮭魚","吳郭魚","大腸","刻花魷魚","蚵仔","透抽圈","草蝦仁","生鮮蝦仁","鱸魚片","虱目魚片","黃喉","黑毛肚","鹹蛤蜊","箭筍片"],"雜貨類":["小魚干","櫻花蝦","蝦米","蝦皮","黃豆醃瓜","醃瓜","乾香菇","油花生","蒜味花生","乾木耳絲","吻仔魚","乾金針","豆腐乳","鹽巴","味精","麵粉","油","仙草","愛玉","油條","桂冠沙拉","起司絲","生花生","乾魷魚","香菇絲","香菇頭","玉米罐頭","黑豆鼓","白胡椒粉","破布子","蘋果醋","麵筋泡","小麵輪","醬冬瓜","豆棗","乾川耳","乾木耳","乾蝦仁","藥膳包","粽葉","南部粽葉","熟粉圓","粽繩","花生麵筋","乳瑪琳","沙拉醬","罐頭鳳梨","牛頭牌沙茶醬","冰梅醬","真空蓮藕片","油飯","酸豆角"],"蛋":["滷蛋","皮蛋","鹹蛋","雞蛋","鹹蛋黃","蔥蛋","菜圃蛋","生鴨蛋","盒裝雞蛋","荷包蛋"],"小菜類":["涼拌豬肝","涼拌豬耳多","紅燒肉","海蜇皮","鴨掌","雞爪","水煮花生","丁香花生","泡菜"],"豆苗類":["水豆芽","乾豆芽","黃豆芽","韭菜"]};
 
 function showSuspMgmt() {
   document.getElementById('suspMsg').textContent = '';
-  document.getElementById('suspInput').value = '';
   document.getElementById('suspOverlay').classList.add('open');
-  renderSuspTags();
-  // 從 GAS 載入最新暫停清單
+  // 初始化分類下拉
+  var sel = document.getElementById('suspCatSel');
+  if (sel.options.length <= 1) {
+    Object.keys(ALL_PRODUCTS).forEach(function(cat) {
+      var opt = document.createElement('option');
+      opt.value = cat; opt.textContent = cat;
+      sel.appendChild(opt);
+    });
+  }
+  // 從 GAS 拉最新暫停清單
   fetch(V2_GAS_URL + '?action=getSuspended')
-    .then(r => r.json())
-    .then(d => {
-      if (d.ok) { suspList = d.suspended || []; renderSuspTags(); }
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) { suspSet = new Set(d.suspended || []); }
+      renderSuspList(); updateSuspCount();
     })
-    .catch(() => {});
+    .catch(function() { renderSuspList(); updateSuspCount(); });
 }
 
 function closeSuspMgmt() {
   document.getElementById('suspOverlay').classList.remove('open');
 }
 
-function renderSuspTags() {
-  const wrap = document.getElementById('suspTags');
-  if (!suspList.length) {
-    wrap.innerHTML = '<span class="susp-empty">目前沒有暫停品項</span>';
-    return;
-  }
-  wrap.innerHTML = suspList.map((name, i) =>
-    '<span class="susp-tag">' + escapeHtml(name) +
-    '<button class="susp-tag-x" onclick="removeSuspItem(' + i + ')">×</button></span>'
-  ).join('');
+function updateSuspCount() {
+  document.getElementById('suspCountBadge').textContent = '暫停 ' + suspSet.size + ' 項';
 }
 
-function addSuspItem() {
-  const inp = document.getElementById('suspInput');
-  const name = inp.value.trim();
-  if (!name) return;
-  if (suspList.includes(name)) {
-    inp.value = '';
-    document.getElementById('suspMsg').textContent = '「' + name + '」已在清單中';
-    document.getElementById('suspMsg').style.color = '#888';
-    return;
-  }
-  suspList.push(name);
-  inp.value = '';
-  document.getElementById('suspMsg').textContent = '';
-  renderSuspTags();
-  inp.focus();
+function renderSuspList() {
+  var cat = document.getElementById('suspCatSel').value;
+  var list = document.getElementById('suspList');
+  var html = '';
+  var cats = cat ? [cat] : Object.keys(ALL_PRODUCTS);
+  cats.forEach(function(c) {
+    var items = ALL_PRODUCTS[c];
+    var suspInCat = items.filter(function(n) { return suspSet.has(n); }).length;
+    if (cats.length > 1) {
+      // 多分類模式：顯示分類標題（有暫停品項的分類突出顯示）
+      html += '<div class="susp-cat-title">' + escapeHtml(c) +
+        (suspInCat ? ' <span style="color:#e74c3c;">（' + suspInCat + '）</span>' : '') + '</div>';
+    }
+    items.forEach(function(name) {
+      var checked = suspSet.has(name) ? 'checked' : '';
+      var rowClass = suspSet.has(name) ? ' is-susp' : '';
+      html += '<div class="susp-row' + rowClass + '" id="susp-row-' + encodeURIComponent(name) + '">' +
+        '<span class="susp-name">' + escapeHtml(name) + '</span>' +
+        '<label class="tog"><input type="checkbox" ' + checked +
+          ' onchange="toggleSuspItem(\'' + name.replace(/'/g,"\\'") + '\',this.checked)">' +
+          '<span class="tog-slider"></span></label>' +
+        '</div>';
+    });
+  });
+  list.innerHTML = html || '<div class="susp-empty-tip">無品項</div>';
 }
 
-function removeSuspItem(idx) {
-  suspList.splice(idx, 1);
-  renderSuspTags();
+function toggleSuspItem(name, on) {
+  if (on) { suspSet.add(name); } else { suspSet.delete(name); }
+  // 更新這一行的樣式
+  var row = document.getElementById('susp-row-' + encodeURIComponent(name));
+  if (row) { row.className = 'susp-row' + (on ? ' is-susp' : ''); }
+  updateSuspCount();
 }
 
 function saveSuspended() {
-  const msg = document.getElementById('suspMsg');
+  var msg = document.getElementById('suspMsg');
   msg.style.color = '#888';
   msg.textContent = '儲存中…';
-  const body = JSON.stringify({ action: 'setSuspended', pwd: pwd, suspended: suspList });
+  var body = JSON.stringify({ action: 'setSuspended', pwd: pwd, suspended: Array.from(suspSet) });
   fetch(V2_GAS_URL, { method: 'POST', body: body })
-    .then(r => r.json())
-    .then(d => {
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
       if (d.ok) {
         msg.style.color = '#15803d';
         msg.textContent = '✅ 已儲存！共 ' + (d.count || 0) + ' 個暫停品項。下單頁下次開啟時生效。';
@@ -1260,7 +1288,7 @@ function saveSuspended() {
         msg.textContent = '❌ 儲存失敗：' + (d.error || '未知錯誤');
       }
     })
-    .catch(() => {
+    .catch(function() {
       msg.style.color = '#c0392b';
       msg.textContent = '❌ 網路錯誤，請再試一次';
     });
