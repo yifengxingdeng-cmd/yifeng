@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <title>義豐行 — 線上下單系統</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
@@ -67,6 +67,10 @@
   .qty-input:focus { border-color: var(--green); }
   .qty-input::-webkit-inner-spin-button, .qty-input::-webkit-outer-spin-button { -webkit-appearance: none; }
   .qty-input[type=number] { -moz-appearance: textfield; }
+  /* ★ iOS 防止 auto-zoom：所有 input/select 字體至少 16px */
+  @supports (-webkit-touch-callout: none) {
+    input, select, textarea { font-size: 16px !important; }
+  }
   .unit-select { font-size: 11px; border: 1px solid var(--border); border-radius: 6px; padding: 2px 4px; font-family: inherit; color: var(--text-muted); background: white; cursor: pointer; margin-top: 4px; width: 100%; display: block; }
   .qty-badge { position: absolute; top: 6px; right: 6px; background: var(--accent); color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: 700; display: none; align-items: center; justify-content: center; }
   .has-qty .qty-badge { display: flex; }
@@ -310,7 +314,7 @@
         <img id="quickOrderPhotoImg" style="width:100%;max-height:200px;object-fit:contain;display:block;background:#f5f3ff">
         <button onclick="clearOrderPhoto()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.5);color:white;border:none;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">×</button>
       </div>
-      <textarea id="quickOrderText" placeholder="請輸入品項，每行一個&#10;例如：&#10;A商品 2 件&#10;B商品 3 箱&#10;C商品 1 包" style="width:100%;height:180px;border:1.5px solid #c4b5fd;border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;resize:vertical;outline:none;line-height:1.8;box-sizing:border-box;display:block"></textarea>
+      <textarea id="quickOrderText" placeholder="請輸入品項，每行一個&#10;例如：&#10;A商品 2 件&#10;B商品 3 箱&#10;C商品 1 包" style="width:100%;min-height:100px;max-height:38vh;border:1.5px solid #c4b5fd;border-radius:10px;padding:10px 12px;font-size:16px;font-family:inherit;resize:none;outline:none;line-height:1.8;box-sizing:border-box;display:block"></textarea>
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" onclick="close1('quickOrderOverlay')">關閉</button>
@@ -1916,6 +1920,41 @@ function closeOverlay(id, event) {
 }
 
 window.addEventListener('DOMContentLoaded', init);
+
+// ── iOS 鍵盤補丁：讓 --app-height 跟著可視區域縮小 ──
+(function() {
+  function setAppHeight() {
+    var h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--app-height', h + 'px');
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', setAppHeight);
+  }
+  window.addEventListener('resize', setAppHeight);
+  setAppHeight();
+})();
+
+// ── 快速下單 textarea：focus 時收起說明框並滾到輸入區 ──
+(function() {
+  var ta = document.getElementById('quickOrderText');
+  if (!ta) return;
+  ta.addEventListener('focus', function() {
+    // 收起說明框，釋放空間
+    var hint = document.getElementById('quickOrderHint');
+    if (hint) hint.style.display = 'none';
+    // 等鍵盤完全出現後，把 textarea 滾到可見位置
+    setTimeout(function() {
+      ta.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+      var body = ta.closest('.modal-body');
+      if (body) body.scrollTop = body.scrollHeight;
+    }, 350);
+  });
+  ta.addEventListener('blur', function() {
+    // 鍵盤收起後還原說明框（下次打開前會被重設）
+    var hint = document.getElementById('quickOrderHint');
+    if (hint) hint.style.display = '';
+  });
+})();
 </script>
 </body>
 </html>
