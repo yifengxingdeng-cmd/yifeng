@@ -1033,6 +1033,16 @@ function init() {
     renderProducts(); updatePanel(); updateQuickBtns();
     setupExistingOrderCheck();
     checkOnPageOpen();
+
+    // ★ 從 LINE 返回時（bfcache 恢復）重新偵測重複訂單
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible' && !editingOrderId) {
+        // 購物車已清空代表剛下過單，重新 check 避免客戶再次送出
+        checkOnPageOpen();
+        // 若購物車是空的，確保按鈕狀態是對的
+        updatePanel();
+      }
+    });
   }
 }
 
@@ -1572,9 +1582,12 @@ function openLine() {
   if (!customer) { alert('請先填入客戶名稱'); releaseLock(); return; }
   if (!items.length) { alert('購物車是空的，請先加入品項'); releaseLock(); return; }
 
-  if (btn) btn.textContent = '⏳ 傳送中...';
+  if (btn) btn.textContent = '⏳ 確認中...';
 
-  submitToBackend(customer, orderDate, deliveryDate, items, (orderId) => {
+  // ★ 送出前即時再查一次重複（防止從 LINE 返回後重複下單）
+  const doSubmit = () => {
+    if (btn) btn.textContent = '⏳ 傳送中...';
+    submitToBackend(customer, orderDate, deliveryDate, items, (orderId) => {
     let msg = '【義豐行訂單】\n';
     msg += '客戶：' + customer + '\n';
     msg += '下單日期：' + orderDate + '\n';
@@ -1600,7 +1613,28 @@ function openLine() {
     // ★ 用 location.href 跳轉（手機不會白畫面，LINE app 接管後按返回可回頁面）
     window.location.href = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
     setTimeout(releaseLock, 3000);
-  });
+    });
+  };
+
+  // 若是編輯既有訂單（editingOrderId 有值），直接送出
+  if (editingOrderId) { doSubmit(); return; }
+
+  // 否則先查重複，有重複就詢問
+  fetch(V2_GAS_URL + '?action=check&customer=' + encodeURIComponent(customer) + '&date=' + encodeURIComponent(deliveryDate))
+    .then(r => r.json())
+    .then(data => {
+      if (data.exists && data.editable) {
+        // 已有訂單：讓客戶選擇覆蓋還是取消
+        releaseLock();
+        askContinueOrNew(data.orderId, data.items, customer, deliveryDate, null, data.history);
+      } else {
+        doSubmit();
+      }
+    })
+    .catch(() => {
+      // 查詢失敗不阻擋，直接讓 GAS 後端去防重複
+      doSubmit();
+    });
 }
 
 function submitToBackend(customer, orderDate, deliveryDate, items, callback) {
