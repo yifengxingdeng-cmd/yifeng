@@ -13,7 +13,7 @@
     --text-muted: #64748b; --border: #86efac; --shadow: 0 2px 12px rgba(30,64,175,0.10);
     --line: #06C755; --blue: #16a34a;
   }
-  body { font-family: 'Noto Sans TC', sans-serif; background: var(--green-bg); color: var(--text); min-height: 100vh; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--green-bg); color: var(--text); min-height: 100dvh; min-height: var(--app-height, 100vh); }
   .header { background: var(--green); color: white; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
   .logo { font-size: 20px; font-weight: 700; letter-spacing: 2px; }
   .logo span { color: #bbf7d0; }
@@ -41,17 +41,17 @@
   .quick-btn.clear .label { color: #c0392b; }
   .quick-divider { width: 1px; background: var(--border); margin: 4px 0; flex-shrink: 0; }
   .search-bar { padding: 12px 20px; background: white; border-bottom: 1px solid var(--border); }
-  .search-input { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 8px 14px 8px 36px; font-size: 14px; font-family: inherit; outline: none; background: var(--green-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 10px center; }
+  .search-input { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 8px 14px 8px 36px; font-size: 16px; font-family: inherit; outline: none; background: var(--green-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 10px center; }
   .search-input:focus { border-color: var(--green-light); background-color: white; }
   .cat-tabs { display: flex; gap: 6px; padding: 10px 20px; overflow-x: auto; background: white; border-bottom: 1px solid var(--border); scrollbar-width: none; }
   .cat-tabs::-webkit-scrollbar { display: none; }
-  .cat-tab { flex-shrink: 0; padding: 5px 14px; border-radius: 16px; border: 1.5px solid var(--border); background: white; font-size: 12px; font-family: inherit; cursor: pointer; color: var(--text-muted); white-space: nowrap; }
+  .cat-tab { flex-shrink: 0; padding: 5px 14px; border-radius: 16px; border: 1.5px solid var(--border); background: white; font-size: 14px; font-family: inherit; cursor: pointer; color: var(--text-muted); white-space: nowrap; }
   .cat-tab:hover { border-color: var(--green-light); color: var(--green); }
   .cat-tab.active { background: var(--green); color: white; border-color: var(--green); }
-  .main { display: flex; height: calc(100vh - 290px); }
+  .main { display: flex; height: calc(100dvh - 290px); height: calc(var(--app-height, 100vh) - 290px); }
   .products-area { flex: 1; overflow-y: auto; padding: 14px 20px; }
   .category-section { margin-bottom: 20px; }
-  .category-title { font-size: 13px; font-weight: 700; color: var(--green); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid var(--green-pale); display: flex; align-items: center; gap: 6px; }
+  .category-title { font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid var(--green-pale); display: flex; align-items: center; gap: 6px; }
   .category-title::before { content: ''; width: 4px; height: 16px; background: var(--green); border-radius: 2px; display: inline-block; }
   .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
   .product-card { background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 8px; text-align: center; transition: all 0.15s; position: relative; }
@@ -59,7 +59,7 @@
   .product-card.has-qty { border-color: var(--green); background: var(--green-bg); }
   .product-card.suspended { opacity: 0.55; background: #f5f5f5; border-color: #d0d0d0; pointer-events: none; }
   .susp-label { display: inline-block; margin-top: 4px; font-size: 10px; color: #999; background: #ececec; border-radius: 4px; padding: 1px 6px; letter-spacing: 0.5px; }
-  .product-name { font-size: 13px; font-weight: 500; margin-bottom: 8px; line-height: 1.3; }
+  .product-name { font-size: 15px; font-weight: 500; margin-bottom: 8px; line-height: 1.3; }
   .qty-controls { display: flex; align-items: center; justify-content: center; gap: 4px; }
   .qty-btn { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); background: white; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--green); transition: all 0.15s; font-family: inherit; flex-shrink: 0; }
   .qty-btn:hover { background: var(--green); color: white; border-color: var(--green); }
@@ -80,15 +80,15 @@
   .order-items { flex: 1; overflow-y: auto; padding: 10px; }
   .order-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 8px; margin-bottom: 4px; background: var(--green-bg); border: 1px solid var(--green-pale); animation: slideIn 0.2s ease; }
   @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
-  .item-name { font-size: 13px; font-weight: 500; }
-  .item-detail { font-size: 12px; color: var(--text-muted); }
+  .item-name { font-size: 15px; font-weight: 500; }
+  .item-detail { font-size: 13px; color: var(--text-muted); }
   .item-remove { background: none; border: none; color: #c0392b; cursor: pointer; font-size: 16px; padding: 2px 4px; opacity: 0.6; }
   .item-remove:hover { opacity: 1; }
   .empty-cart { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 13px; }
   .empty-cart .icon { font-size: 36px; margin-bottom: 8px; }
   .panel-footer { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
-  .total-count { font-size: 13px; color: var(--text-muted); }
-  .total-count strong { color: var(--green); font-size: 15px; }
+  .total-count { font-size: 14px; color: var(--text-muted); }
+  .total-count strong { color: var(--green); font-size: 16px; }
   .export-btn { background: var(--green); color: white; border: none; border-radius: 10px; padding: 10px; font-size: 14px; font-family: inherit; font-weight: 700; cursor: pointer; }
   .export-btn:hover { background: var(--green-light); }
   .modal-overlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; }
@@ -1649,13 +1649,35 @@ function getAllProductNames() {
   return map;
 }
 
-function loadRuntimeProducts() {
-  // 從 localStorage 載入自訂品項（管理員可透過 Excel 上傳覆蓋）
-  try {
-    const saved = localStorage.getItem(LS_PRODUCTS);
-    if (saved) JSON.parse(saved); // 只做格式驗證
-  } catch(e) { localStorage.removeItem(LS_PRODUCTS); }
+function loadRuntimeProducts(silent) {
+  // 從 GAS 品項表同步最新品項（品項表為空則繼續用本地 PRODUCTS 常數）
+  if (!V2_GAS_URL || V2_GAS_URL.indexOf('YOUR_GAS') !== -1) return;
+  fetch(V2_GAS_URL + '?action=getProducts')
+    .then(r => r.json())
+    .then(data => {
+      if (data.fromSheets && data.products && Object.keys(data.products).length > 0) {
+        localStorage.setItem(LS_PRODUCTS, JSON.stringify(data.products));
+        buildTabs(); renderProducts();
+        if (!silent) showToast('🔄 品項已從雲端同步');
+      }
+    })
+    .catch(() => {}); // 載入失敗靜默，繼續用本地預設
 }
+
+// 1) 監聽 storage 事件：儀表板在另一分頁儲存品項時立即更新
+window.addEventListener('storage', function(e) {
+  if (e.key === LS_PRODUCTS && e.newValue) {
+    try {
+      const products = JSON.parse(e.newValue);
+      if (products && Object.keys(products).length > 0) {
+        buildTabs(); renderProducts();
+        showToast('🔄 品項已由後台更新');
+      }
+    } catch(err) {}
+  }
+});
+// 2) 每 10 分鐘從 GAS 重新拉一次（客戶長時間開著頁面的備援）
+setInterval(function() { loadRuntimeProducts(true); }, 10 * 60 * 1000);
 
 // ── 新增品項功能 ──────────────────────────────────
 let pendingNewItems = [];
