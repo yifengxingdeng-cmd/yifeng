@@ -983,7 +983,7 @@ const PRODUCTS = {
 const V2_GAS_URL = 'https://script.google.com/macros/s/AKfycbz3lQIEATx7e4Cbcw0gC6o3dbCBnIpMf9Bt5U5eXEHCZzjLbBRITKnpw2veMwuepdfq3w/exec';
 // ★ 部署 Firebase 後把 YOUR_YIFENG_FIREBASE_URL 換成實際網址
 const FIREBASE_URL = 'https://yifeng-order-default-rtdb.asia-southeast1.firebasedatabase.app';
-const FRONTEND_VERSION = 'v1.5-義豐行-2026-09-21';
+const FRONTEND_VERSION = 'v1.6-義豐行-2026-09-21';
 
 function useFirebase() {
   return FIREBASE_URL && FIREBASE_URL.indexOf('YOUR_YIFENG_FIREBASE') === -1;
@@ -1739,38 +1739,44 @@ function submitToBackend(customer, orderDate, deliveryDate, items, callback) {
   const itemsData = items.map(([name, {qty, unit, note}]) => ({name, qty, unit, note: note||''}));
 
   if (useFirebase()) {
+    const isEdit = !!editingOrderId;
     const orderData = {
-      customer,
-      orderDate,
-      deliveryDate,
+      customer, orderDate, deliveryDate,
       items: itemsData,
-      createdAt: editingOrderId ? undefined : Date.now(),
       updatedAt: Date.now(),
       status: 'pending',
       synced: false
     };
-    if (editingOrderId) {
-      orderData.createdAt = undefined; // PUT 保留原有 createdAt
-      delete orderData.createdAt;
-    }
-    const url = editingOrderId
+    if (!isEdit) orderData.createdAt = Date.now();
+
+    const url = isEdit
       ? FIREBASE_URL + '/orders/' + editingOrderId + '.json'
       : FIREBASE_URL + '/orders.json';
-    const method = editingOrderId ? 'PUT' : 'POST';
-    const body = editingOrderId
-      ? JSON.stringify(Object.assign(orderData, {createdAt: Date.now()})) // PUT 保留 createdAt
-      : JSON.stringify(orderData);
+    const method = isEdit ? 'PUT' : 'POST';
+    if (isEdit) orderData.createdAt = Date.now(); // PUT 時一起帶 createdAt
 
-    fetch(url, {method, headers: {'Content-Type': 'application/json'}, body})
+    fetch(url, {method, headers: {'Content-Type': 'application/json'}, body: JSON.stringify(orderData)})
       .then(r => r.json())
       .then(result => {
+        // Firebase 寫入被規則拒絕（{error:"Permission denied"}）→ 退回 GAS 同步
+        if (result.error) {
+          console.warn('[Firebase write error]', result.error, '→ fallback to GAS');
+          submitViaGAS(customer, orderDate, deliveryDate, itemsData, null, callback);
+          return;
+        }
         const newId = result.name || editingOrderId || '';
         if (newId) editingOrderId = newId;
         saveHistory();
         localStorage.setItem('lastOrder', JSON.stringify(cart));
         if (callback) callback(newId);
-        // 背景同步 GAS（不等待）
-        submitViaGAS(customer, orderDate, deliveryDate, itemsData, newId, null);
+        // 背景同步 GAS：keepalive=true 讓 fetch 在導頁後仍能完成（不被取消）
+        try {
+          fetch(V2_GAS_URL, {
+            method: 'POST',
+            keepalive: true,
+            body: JSON.stringify({action: 'sync', id: newId, customer, orderDate, deliveryDate, items: itemsData})
+          }).catch(() => {});
+        } catch(e) {}
       })
       .catch(() => submitViaGAS(customer, orderDate, deliveryDate, itemsData, null, callback));
     return;
@@ -1780,11 +1786,14 @@ function submitToBackend(customer, orderDate, deliveryDate, items, callback) {
 }
 
 function submitViaGAS(customer, orderDate, deliveryDate, itemsData, knownId, callback) {
+  const gasId = knownId || editingOrderId || '';
+  // keepalive=true：即使 window.location.href 導頁，fetch 仍能在背景完成
   fetch(V2_GAS_URL, {
     method: 'POST',
+    keepalive: true,
     body: JSON.stringify({
       action: 'save',
-      id: knownId || editingOrderId || '',
+      id: gasId,
       customer, orderDate, deliveryDate,
       items: itemsData
     })
@@ -1795,14 +1804,14 @@ function submitViaGAS(customer, orderDate, deliveryDate, itemsData, knownId, cal
       if (result.error) { alert('儲存失敗：' + result.error); return; }
       saveHistory();
       localStorage.setItem('lastOrder', JSON.stringify(cart));
-      callback(result.id || knownId || '');
+      callback(result.id || gasId || '');
     }
   })
   .catch(() => {
     if (callback) {
       saveHistory();
       localStorage.setItem('lastOrder', JSON.stringify(cart));
-      callback(knownId || '');
+      callback(gasId || '');
     }
   });
 }
