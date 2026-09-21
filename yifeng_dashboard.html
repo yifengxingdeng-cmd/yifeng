@@ -460,7 +460,20 @@
 <script>
 // ★ 部署好新的 Apps Script 後，把網址貼在這裡（跟 order.html 用同一個）
 const V2_GAS_URL = 'https://script.google.com/macros/s/AKfycbz3lQIEATx7e4Cbcw0gC6o3dbCBnIpMf9Bt5U5eXEHCZzjLbBRITKnpw2veMwuepdfq3w/exec';
-const FRONTEND_VERSION = 'v2.18-義豐行-2026-09-17';
+// ★ 部署 Firebase 後把 YOUR_YIFENG_FIREBASE_URL 換成實際網址
+const FIREBASE_URL = 'https://yifeng-order-default-rtdb.asia-southeast1.firebasedatabase.app';
+const FRONTEND_VERSION = 'v2.20-義豐行-2026-09-21';
+
+function useFirebase() {
+  return FIREBASE_URL && FIREBASE_URL.indexOf('YOUR_YIFENG_FIREBASE') === -1;
+}
+
+function formatTs(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + ' ' +
+    String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
 
 fetch(V2_GAS_URL + '?action=ping').then(r=>r.json()).then(d=>{
   const el = document.createElement('div');
@@ -495,7 +508,40 @@ function todayStr() {
 }
 
 function loadDashboard(dateOverride) {
-  const date = dateOverride || todayStr();
+  const date = dateOverride || document.getElementById('dateInput') && document.getElementById('dateInput').value || todayStr();
+
+  if (useFirebase()) {
+    const url = FIREBASE_URL + '/orders.json?orderBy=%22deliveryDate%22&equalTo=%22' + encodeURIComponent(date) + '%22';
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        if (!data) { renderOrders([], date); return; }
+        const orders = Object.entries(data).map(([id, o]) => ({
+          orderId: id,
+          customer: o.customer || '',
+          customerAlias: o.customerAlias || '',
+          deliveryDate: o.deliveryDate || date,
+          items: o.items || [],
+          status: o.status || 'pending',
+          createdAt: o.createdAtStr || formatTs(o.createdAt),
+          updatedAt: o.updatedAtStr || formatTs(o.updatedAt || o.createdAt),
+          changeCount: o.changeCount || 1,
+          logs: o.logs || [],
+          printedPrices: o.printedPrices || null
+        }));
+        sessionStorage.setItem('yifeng_dashboard_pwd', pwd);
+        renderOrders(orders, date);
+      })
+      .catch(() => {
+        // Firebase 失敗退回 GAS
+        fetchDashboardFromGAS(date);
+      });
+    return;
+  }
+  fetchDashboardFromGAS(date);
+}
+
+function fetchDashboardFromGAS(date) {
   fetch(V2_GAS_URL + '?action=dashboard&date=' + encodeURIComponent(date) + '&pwd=' + encodeURIComponent(pwd))
     .then(r => r.json())
     .then(data => {
@@ -627,25 +673,48 @@ function deleteBatch() {
   if (!count) return;
   if (!confirm('確定要「永久刪除」選取的 ' + count + ' 筆訂單嗎？\n\n這跟「取消」不一樣，刪除後連紀錄都不會留下，無法復原，僅建議測試資料使用。')) return;
 
+  const ids = Array.from(selectedIds);
+  const date = document.getElementById('dateInput').value;
+
+  if (useFirebase()) {
+    Promise.all(ids.map(id =>
+      fetch(FIREBASE_URL + '/orders/' + id + '.json', {method: 'DELETE'}).catch(() => {})
+    )).then(() => loadDashboard(date)).catch(() => loadDashboard(date));
+    // 背景同步 GAS
+    fetch(V2_GAS_URL, {method:'POST', body: JSON.stringify({action:'deleteBatch', ids, pwd})}).catch(()=>{});
+    return;
+  }
+
   fetch(V2_GAS_URL, {
     method: 'POST',
-    body: JSON.stringify({ action: 'deleteBatch', ids: Array.from(selectedIds), pwd: pwd })
+    body: JSON.stringify({ action: 'deleteBatch', ids, pwd })
   })
     .then(r => r.json())
     .then(result => {
       if (result.error) { alert('刪除失敗：' + result.error); return; }
-      loadDashboard(document.getElementById('dateInput').value);
+      loadDashboard(date);
     })
     .catch(() => alert('刪除失敗，請檢查網路後再試一次。'));
 }
 
 function deleteOrder(orderId, customer) {
   if (!confirm('確定要「永久刪除」' + customer + ' 這筆訂單（' + orderId + '）嗎？\n\n這跟「取消」不一樣，刪除後連紀錄都不會留下，無法復原，僅建議測試資料使用。')) return;
+  const date = document.getElementById('dateInput').value;
+
+  if (useFirebase()) {
+    fetch(FIREBASE_URL + '/orders/' + orderId + '.json', {method: 'DELETE'})
+      .then(() => loadDashboard(date))
+      .catch(() => loadDashboard(date));
+    // 背景同步 GAS
+    fetch(V2_GAS_URL + '?action=delete&id=' + encodeURIComponent(orderId) + '&pwd=' + encodeURIComponent(pwd)).catch(()=>{});
+    return;
+  }
+
   fetch(V2_GAS_URL + '?action=delete&id=' + encodeURIComponent(orderId) + '&pwd=' + encodeURIComponent(pwd))
     .then(r => r.json())
     .then(result => {
       if (result.error) { alert('刪除失敗：' + result.error); return; }
-      loadDashboard(document.getElementById('dateInput').value);
+      loadDashboard(date);
     })
     .catch(() => alert('刪除失敗，請檢查網路後再試一次。'));
 }
@@ -682,12 +751,27 @@ function getOrderPrice(orderIdx, itemName) {
   return '';
 }
 
-// 把批價存回 GAS 訂單紀錄（同時更新本地 currentOrders）
+// 把批價存回訂單紀錄（Firebase PATCH 優先，GAS 備援）
 function savePrintPricesToOrder(orderIdx, priceMap, total) {
   var o = currentOrders[orderIdx];
   var priceData = {prices: priceMap, total: total, printedAt: new Date().toLocaleString('zh-TW')};
   // 先更新本地，讓卡片立即顯示
   currentOrders[orderIdx].printedPrices = priceData;
+
+  if (useFirebase()) {
+    fetch(FIREBASE_URL + '/orders/' + o.orderId + '.json', {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({printedPrices: priceData})
+    }).catch(function(){});
+    // 背景同步 GAS（CORS: 不加 Content-Type）
+    fetch(V2_GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({action: 'savePrintPrices', pwd: pwd, id: o.orderId, prices: priceMap, total: total})
+    }).catch(function(){});
+    return;
+  }
+
   // 非同步存回 GAS（注意：不能加 Content-Type: application/json，否則觸發 CORS 預檢導致 POST 被封鎖）
   fetch(V2_GAS_URL, {
     method: 'POST',
@@ -1601,6 +1685,33 @@ function saveEditOrder() {
   var alias = document.getElementById('editAlias').value.trim();
   var btn = document.querySelector('.edit-save');
   btn.disabled = true; btn.textContent = '儲存中…';
+
+  var doLocalUpdate = function() {
+    currentOrders[editOrderIdx].items = editItems;
+    currentOrders[editOrderIdx].customerAlias = alias;
+    closeEditOrder();
+    renderOrders(currentOrders, document.getElementById('dateInput') ? document.getElementById('dateInput').value : '');
+  };
+
+  if (useFirebase()) {
+    fetch(FIREBASE_URL + '/orders/' + o.orderId + '.json', {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({items: editItems, customerAlias: alias, updatedAt: Date.now(), synced: false})
+    })
+    .then(function() {
+      btn.disabled = false; btn.textContent = '💾 儲存';
+      doLocalUpdate();
+      // 背景同步 GAS
+      fetch(V2_GAS_URL, {method:'POST', body: JSON.stringify({action:'editOrder', pwd, id: o.orderId, items: editItems, customerAlias: alias})}).catch(function(){});
+    })
+    .catch(function() {
+      btn.disabled = false; btn.textContent = '💾 儲存';
+      alert('❌ 儲存失敗，請檢查網路後再試');
+    });
+    return;
+  }
+
   fetch(V2_GAS_URL, {
     method: 'POST',
     body: JSON.stringify({ action: 'editOrder', pwd: pwd, id: o.orderId, items: editItems, customerAlias: alias })
@@ -1609,11 +1720,7 @@ function saveEditOrder() {
   .then(function(d) {
     btn.disabled = false; btn.textContent = '💾 儲存';
     if (d.error) { alert('❌ 儲存失敗：' + d.error); return; }
-    // 更新本地快取
-    currentOrders[editOrderIdx].items = editItems;
-    currentOrders[editOrderIdx].customerAlias = alias;
-    closeEditOrder();
-    renderOrders(currentOrders, document.getElementById('dateInput') ? document.getElementById('dateInput').value : '');
+    doLocalUpdate();
   })
   .catch(function() {
     btn.disabled = false; btn.textContent = '💾 儲存';

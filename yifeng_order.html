@@ -971,7 +971,55 @@ const PRODUCTS = {
 
 // ★ 部署好新的 Apps Script 後，把網址貼在這裡
 const V2_GAS_URL = 'https://script.google.com/macros/s/AKfycbz3lQIEATx7e4Cbcw0gC6o3dbCBnIpMf9Bt5U5eXEHCZzjLbBRITKnpw2veMwuepdfq3w/exec';
-const FRONTEND_VERSION = 'v1.2-義豐行-2026-09-17';
+// ★ 部署 Firebase 後把 YOUR_YIFENG_FIREBASE_URL 換成實際網址
+const FIREBASE_URL = 'https://yifeng-order-default-rtdb.asia-southeast1.firebasedatabase.app';
+const FRONTEND_VERSION = 'v1.4-義豐行-2026-09-21';
+
+function useFirebase() {
+  return FIREBASE_URL && FIREBASE_URL.indexOf('YOUR_YIFENG_FIREBASE') === -1;
+}
+
+function checkDuplicateFirebase(customer, deliveryDate) {
+  const url = FIREBASE_URL + '/orders.json?orderBy=%22deliveryDate%22&equalTo=%22' + encodeURIComponent(deliveryDate) + '%22';
+  return fetch(url)
+    .then(r => r.json())
+    .then(data => {
+      if (!data) return {exists: false};
+      const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+      const match = Object.entries(data).find(([id, order]) =>
+        order.customer === customer && order.status !== 'cancelled' && (order.createdAt || 0) > cutoff
+      );
+      if (!match) return {exists: false};
+      const [orderId, order] = match;
+      return {exists: true, editable: true, orderId, items: order.items || [], history: []};
+    });
+}
+
+function cancelOrderInFirebase(orderId) {
+  return fetch(FIREBASE_URL + '/orders/' + orderId + '.json', {
+    method: 'PATCH',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({status: 'cancelled'})
+  }).then(r => r.json());
+}
+
+function showOrderSuccessBanner(customer, deliveryDate, itemCount, orderId) {
+  if (document.getElementById('orderSuccessOverlay')) return;
+  const overlay = document.createElement('div');
+  overlay.id = 'orderSuccessOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  const editLink = orderId
+    ? `<a href="${window.location.origin + window.location.pathname}?edit=${orderId}" style="display:block;margin-top:12px;color:#15803d;font-size:13px;text-decoration:underline;">📝 點此修改這張訂單</a>` : '';
+  overlay.innerHTML = `<div style="background:white;border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.25);">
+    <div style="font-size:48px;margin-bottom:8px;">✅</div>
+    <div style="font-size:18px;font-weight:700;color:#059669;margin-bottom:6px;">訂單已送出！</div>
+    <div style="font-size:14px;color:#555;line-height:1.7;">客戶：<strong>${customer}</strong><br>送貨日期：<strong>${deliveryDate}</strong><br>共 <strong>${itemCount}</strong> 項品項</div>
+    ${editLink}
+    <div style="margin-top:8px;font-size:12px;color:#aaa;">LINE 分享視窗已開啟，如果沒有跳出請手動分享。</div>
+    <button onclick="document.getElementById('orderSuccessOverlay').remove()" style="margin-top:18px;width:100%;background:#059669;color:white;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;">確認，繼續</button>
+  </div>`;
+  document.body.appendChild(overlay);
+}
 
 const LS_CART     = 'yifeng_cart';
 const LS_CUSTOMER = 'yifeng_customer';
@@ -1063,6 +1111,21 @@ function checkOnPageOpen() {
   const customer = document.getElementById('customerName').value.trim();
   const delivery = document.getElementById('deliveryDate').value;
 
+  if (useFirebase() && customer && delivery) {
+    checkDuplicateFirebase(customer, delivery)
+      .then(data => {
+        if (data.exists && data.editable) {
+          lockSendButtonsForExistingOrder();
+          showV2ClickableBanner('您今天已經下過訂單了，點這裡查看／修改', () => {
+            askContinueOrNew(data.orderId, data.items, customer, delivery, null, data.history);
+          });
+        }
+        markSplashDataReady();
+      })
+      .catch(() => { markSplashDataReady(); });
+    return;
+  }
+
   fetch(V2_GAS_URL + '?action=check&customer=' + encodeURIComponent(customer) + '&date=' + encodeURIComponent(delivery))
     .then(r => r.json())
     .then(data => {
@@ -1082,8 +1145,21 @@ function checkOnPageOpen() {
 
 function loadOrderForEdit(id) {
   showV2Banner('loading', '正在載入您的訂單…');
-  fetch(V2_GAS_URL + '?action=order&id=' + encodeURIComponent(id))
-    .then(r => r.json())
+  const loadP = useFirebase()
+    ? fetch(FIREBASE_URL + '/orders/' + id + '.json').then(r => r.json()).then(data => {
+        if (!data) throw new Error('not found');
+        return {
+          customer: data.customer || '',
+          deliveryDate: data.deliveryDate || '',
+          items: data.items || [],
+          status: data.status || 'pending',
+          editable: true,
+          history: [],
+          cutoffTime: ''
+        };
+      })
+    : fetch(V2_GAS_URL + '?action=order&id=' + encodeURIComponent(id)).then(r => r.json());
+  loadP
     .then(data => {
       if (data.error) {
         showV2Banner('error', '找不到這張訂單，連結可能已失效，請聯絡店家。');
@@ -1110,7 +1186,7 @@ function loadOrderForEdit(id) {
       markSplashDataReady();
     })
     .catch(() => { showV2Banner('error', '連線失敗，請檢查網路。'); markSplashDataReady(); });
-}
+}  // end loadOrderForEdit
 
 function showHistoryLine(history) {
   if (!history || !history.length) return;
@@ -1137,17 +1213,17 @@ function setupExistingOrderCheck() {
     const delivery = dateEl.value;
     if (!customer || !delivery || editingOrderId) return;
     unlockSendButtons();
-    fetch(V2_GAS_URL + '?action=check&customer=' + encodeURIComponent(customer) + '&date=' + encodeURIComponent(delivery))
-      .then(r => r.json())
-      .then(data => {
-        if (data.exists && data.editable) {
-          lockSendButtonsForExistingOrder();
-          showV2ClickableBanner('您今天已經下過訂單了，點這裡查看／修改', () => {
-            askContinueOrNew(data.orderId, data.items, customer, delivery, null, data.history);
-          });
-        }
-      })
-      .catch(() => {});
+    const checkP = useFirebase()
+      ? checkDuplicateFirebase(customer, delivery)
+      : fetch(V2_GAS_URL + '?action=check&customer=' + encodeURIComponent(customer) + '&date=' + encodeURIComponent(delivery)).then(r => r.json());
+    checkP.then(data => {
+      if (data.exists && data.editable) {
+        lockSendButtonsForExistingOrder();
+        showV2ClickableBanner('您今天已經下過訂單了，點這裡查看／修改', () => {
+          askContinueOrNew(data.orderId, data.items, customer, delivery, null, data.history);
+        });
+      }
+    }).catch(() => {});
   };
   nameEl.addEventListener('blur', trigger);
   dateEl.addEventListener('change', trigger);
@@ -1185,23 +1261,36 @@ function askContinueOrNew(orderId, items, customer, delivery, onChoice, history)
 function cancelExistingOrder(orderId, customer, delivery) {
   if (!confirm('確定要取消今天（' + delivery + '）的訂單嗎？取消後無法復原，如果要重新下單要整個重填。')) return;
 
+  const doCancel = () => {
+    editingOrderId = null;
+    unlockSendButtons();
+    cart = {};
+    renderProducts(); updatePanel(); updateQuickBtns();
+    autoSave();
+    let msg = '【義豐行訂單取消通知】\n';
+    msg += '客戶：' + customer + '\n';
+    msg += '🚚 送貨日期：' + delivery + '\n';
+    msg += '此訂單（' + orderId + '）已由客戶取消，請勿出貨，謝謝。\n';
+    showV2Banner('error', '❌ 訂單已取消（' + orderId + '）');
+    window.location.href = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
+  };
+
+  if (useFirebase()) {
+    // Firebase 取消 + GAS 同步取消（GAS 同步由背景觸發器處理亦可）
+    cancelOrderInFirebase(orderId).then(doCancel).catch(() => {
+      // Firebase 失敗退回 GAS
+      fetch(V2_GAS_URL + '?action=cancel&id=' + encodeURIComponent(orderId))
+        .then(r => r.json()).then(doCancel)
+        .catch(() => alert('取消失敗，請檢查網路後再試一次。'));
+    });
+    return;
+  }
+
   fetch(V2_GAS_URL + '?action=cancel&id=' + encodeURIComponent(orderId))
     .then(r => r.json())
     .then(result => {
       if (result.error) { alert('取消失敗：' + result.error); return; }
-      editingOrderId = null;
-      unlockSendButtons();
-      cart = {};
-      renderProducts(); updatePanel(); updateQuickBtns();
-      autoSave();
-
-      let msg = '【義豐行訂單取消通知】\n';
-      msg += '客戶：' + customer + '\n';
-      msg += '🚚 送貨日期：' + delivery + '\n';
-      msg += '此訂單（' + orderId + '）已由客戶取消，請勿出貨，謝謝。\n';
-
-      showV2Banner('error', '❌ 訂單已取消（' + orderId + '）');
-      window.location.href = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
+      doCancel();
     })
     .catch(() => alert('取消失敗，請檢查網路後再試一次。'));
 }
@@ -1564,7 +1653,6 @@ function openOrderModal() {
 
 // ── LINE 傳送 ─────────────────────────────────────
 function openLine() {
-  // 防止重複點擊（同舊版邏輯）
   if (window._isSendingOrder) return;
   window._isSendingOrder = true;
 
@@ -1582,87 +1670,130 @@ function openLine() {
   if (!customer) { alert('請先填入客戶名稱'); releaseLock(); return; }
   if (!items.length) { alert('購物車是空的，請先加入品項'); releaseLock(); return; }
 
-  if (btn) btn.textContent = '⏳ 確認中...';
-
-  // ★ 送出前即時再查一次重複（防止從 LINE 返回後重複下單）
-  const doSubmit = () => {
+  const doSendLine = (customer, orderDate, deliveryDate, items, btn, releaseLock) => {
     if (btn) btn.textContent = '⏳ 傳送中...';
     submitToBackend(customer, orderDate, deliveryDate, items, (orderId) => {
-    let msg = '【義豐行訂單】\n';
-    msg += '客戶：' + customer + '\n';
-    msg += '下單日期：' + orderDate + '\n';
-    msg += '🚚 送貨日期：' + deliveryDate + '\n';
-    msg += '──────────────\n';
-    items.forEach(([name, {qty, unit, note}], i) => {
-      msg += (i+1) + '. ' + name + '　' + qty + unit;
-      if (note) msg += '（' + note + '）';
-      msg += '\n';
-    });
-    msg += '──────────────\n';
-    msg += '共 ' + items.length + ' 項\n';
-    if (orderId) {
-      const editUrl = window.location.origin + window.location.pathname + '?edit=' + orderId;
-      msg += '📝 點此修改訂單：\n' + editUrl + '\n';
-    }
-    // ★ 清空購物車（下單成功後重置）
-    cart = {};
-    editingOrderId = null;
-    autoSave();
-    renderProducts();
-    updatePanel();
-    // ★ 用 location.href 跳轉（手機不會白畫面，LINE app 接管後按返回可回頁面）
-    window.location.href = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
-    setTimeout(releaseLock, 3000);
+      let msg = '【義豐行訂單】\n';
+      msg += '客戶：' + customer + '\n';
+      msg += '下單日期：' + orderDate + '\n';
+      msg += '🚚 送貨日期：' + deliveryDate + '\n';
+      msg += '──────────────\n';
+      items.forEach(([name, {qty, unit, note}], i) => {
+        msg += (i+1) + '. ' + name + '　' + qty + unit;
+        if (note) msg += '（' + note + '）';
+        msg += '\n';
+      });
+      msg += '──────────────\n';
+      msg += '共 ' + items.length + ' 項\n';
+      if (orderId) {
+        const editUrl = window.location.origin + window.location.pathname + '?edit=' + orderId;
+        msg += '📝 點此修改訂單：\n' + editUrl + '\n';
+      }
+      cart = {};
+      editingOrderId = null;
+      autoSave(); renderProducts(); updatePanel();
+      showOrderSuccessBanner(customer, deliveryDate, items.length, orderId);
+      window.location.href = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
+      setTimeout(releaseLock, 3000);
     });
   };
 
   // 若是編輯既有訂單（editingOrderId 有值），直接送出
-  if (editingOrderId) { doSubmit(); return; }
+  if (editingOrderId) { doSendLine(customer, orderDate, deliveryDate, items, btn, releaseLock); return; }
 
-  // 否則先查重複，有重複就詢問
-  fetch(V2_GAS_URL + '?action=check&customer=' + encodeURIComponent(customer) + '&date=' + encodeURIComponent(deliveryDate))
-    .then(r => r.json())
+  // 送出前查重複（Firebase 快，GAS 慢，都設 timeout 防止卡住）
+  const checkPromise = useFirebase()
+    ? checkDuplicateFirebase(customer, deliveryDate)
+    : fetch(V2_GAS_URL + '?action=check&customer=' + encodeURIComponent(customer) + '&date=' + encodeURIComponent(deliveryDate)).then(r => r.json());
+  const timeoutMs = useFirebase() ? 3000 : 5000;
+  const timeoutPromise = new Promise(resolve => setTimeout(() => resolve({_timeout: true}), timeoutMs));
+
+  Promise.race([checkPromise, timeoutPromise])
     .then(data => {
-      if (data.exists && data.editable) {
-        // 已有訂單：讓客戶選擇覆蓋還是取消
+      if (!data._timeout && data.exists && data.editable) {
         releaseLock();
-        askContinueOrNew(data.orderId, data.items, customer, deliveryDate, null, data.history);
+        askContinueOrNew(data.orderId, data.items, customer, deliveryDate, (choice) => {
+          if (choice === 'continue') openLine();
+        }, data.history);
       } else {
-        doSubmit();
+        doSendLine(customer, orderDate, deliveryDate, items, btn, releaseLock);
       }
     })
     .catch(() => {
-      // 查詢失敗不阻擋，直接讓 GAS 後端去防重複
-      doSubmit();
+      doSendLine(customer, orderDate, deliveryDate, items, btn, releaseLock);
     });
 }
 
+// ── 後端儲存：Firebase 優先，GAS 備援 ─────────────
 function submitToBackend(customer, orderDate, deliveryDate, items, callback) {
   const itemsData = items.map(([name, {qty, unit, note}]) => ({name, qty, unit, note: note||''}));
+
+  if (useFirebase()) {
+    const orderData = {
+      customer,
+      orderDate,
+      deliveryDate,
+      items: itemsData,
+      createdAt: editingOrderId ? undefined : Date.now(),
+      updatedAt: Date.now(),
+      status: 'pending',
+      synced: false
+    };
+    if (editingOrderId) {
+      orderData.createdAt = undefined; // PUT 保留原有 createdAt
+      delete orderData.createdAt;
+    }
+    const url = editingOrderId
+      ? FIREBASE_URL + '/orders/' + editingOrderId + '.json'
+      : FIREBASE_URL + '/orders.json';
+    const method = editingOrderId ? 'PUT' : 'POST';
+    const body = editingOrderId
+      ? JSON.stringify(Object.assign(orderData, {createdAt: Date.now()})) // PUT 保留 createdAt
+      : JSON.stringify(orderData);
+
+    fetch(url, {method, headers: {'Content-Type': 'application/json'}, body})
+      .then(r => r.json())
+      .then(result => {
+        const newId = result.name || editingOrderId || '';
+        if (newId) editingOrderId = newId;
+        saveHistory();
+        localStorage.setItem('lastOrder', JSON.stringify(cart));
+        if (callback) callback(newId);
+        // 背景同步 GAS（不等待）
+        submitViaGAS(customer, orderDate, deliveryDate, itemsData, newId, null);
+      })
+      .catch(() => submitViaGAS(customer, orderDate, deliveryDate, itemsData, null, callback));
+    return;
+  }
+
+  submitViaGAS(customer, orderDate, deliveryDate, itemsData, null, callback);
+}
+
+function submitViaGAS(customer, orderDate, deliveryDate, itemsData, knownId, callback) {
   fetch(V2_GAS_URL, {
     method: 'POST',
     body: JSON.stringify({
       action: 'save',
-      id: editingOrderId || '',
-      customer: customer,
-      orderDate: orderDate,
-      deliveryDate: deliveryDate,
+      id: knownId || editingOrderId || '',
+      customer, orderDate, deliveryDate,
       items: itemsData
     })
   })
   .then(r => r.json())
   .then(result => {
-    if (result.error) { alert('儲存失敗：' + result.error); return; }
-    if (result.id) editingOrderId = result.id;
-    saveHistory();
-    localStorage.setItem('lastOrder', JSON.stringify(cart));
-    if (callback) callback(result.id || '');
+    if (callback) {
+      if (result.error) { alert('儲存失敗：' + result.error); return; }
+      saveHistory();
+      localStorage.setItem('lastOrder', JSON.stringify(cart));
+      callback(result.id || knownId || '');
+    }
   })
   .catch(() => {
-    // 即使後端失敗，還是繼續傳LINE
-    saveHistory();
-    localStorage.setItem('lastOrder', JSON.stringify(cart));
-    if (callback) callback('');
+    if (callback) {
+      saveHistory();
+      localStorage.setItem('lastOrder', JSON.stringify(cart));
+      callback(knownId || '');
+    }
   });
 }
 
