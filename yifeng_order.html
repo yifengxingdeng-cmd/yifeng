@@ -93,6 +93,16 @@
   .export-btn:hover { background: var(--green-light); }
   .modal-overlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
+  /* 數量輸入彈窗 */
+  #qtyModalOverlay { z-index: 300; }
+  #qtyModalBox { background: #fff; border-radius: 16px; padding: 28px 24px 20px; width: 280px; box-shadow: 0 8px 32px rgba(0,0,0,0.22); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  #qtyModalName { font-size: 17px; font-weight: 700; color: var(--text); text-align: center; }
+  #qtyModalInput { width: 100%; font-size: 32px; font-weight: 700; text-align: center; border: 2px solid var(--green); border-radius: 10px; padding: 10px 8px; color: var(--green); outline: none; -moz-appearance: textfield; }
+  #qtyModalInput::-webkit-outer-spin-button, #qtyModalInput::-webkit-inner-spin-button { -webkit-appearance: none; }
+  #qtyModalBtns { display: flex; gap: 10px; width: 100%; }
+  #qtyModalBtns button { flex: 1; padding: 12px 0; border-radius: 10px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  #qtyModalCancel { background: #f1f5f9; color: #64748b; }
+  #qtyModalConfirm { background: var(--green); color: #fff; }
   .modal { background: white; border-radius: 16px; width: 90%; max-width: 520px; max-height: 82vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
   .modal-header { padding: 16px 20px; color: white; display: flex; justify-content: space-between; align-items: center; }
   .modal-header.green { background: var(--green); }
@@ -973,7 +983,7 @@ const PRODUCTS = {
 const V2_GAS_URL = 'https://script.google.com/macros/s/AKfycbz3lQIEATx7e4Cbcw0gC6o3dbCBnIpMf9Bt5U5eXEHCZzjLbBRITKnpw2veMwuepdfq3w/exec';
 // ★ 部署 Firebase 後把 YOUR_YIFENG_FIREBASE_URL 換成實際網址
 const FIREBASE_URL = 'https://yifeng-order-default-rtdb.asia-southeast1.firebasedatabase.app';
-const FRONTEND_VERSION = 'v1.4-義豐行-2026-09-21';
+const FRONTEND_VERSION = 'v1.5-義豐行-2026-09-21';
 
 function useFirebase() {
   return FIREBASE_URL && FIREBASE_URL.indexOf('YOUR_YIFENG_FIREBASE') === -1;
@@ -1418,8 +1428,8 @@ function renderProducts() {
           <div class="product-name">${name}</div>
           <div class="qty-controls">
             <button class="qty-btn" onclick="changeQty('${name}',-1)">−</button>
-            <input class="qty-input" type="number" min="0" value="${qty||''}" placeholder="0"
-              onchange="setQty('${name}',this.value)" oninput="setQty('${name}',this.value)" onclick="this.select()">
+            <input class="qty-input" type="text" inputmode="none" readonly value="${qty||''}" placeholder="0"
+              onclick="openQtyModal('${name}')" style="cursor:pointer;caret-color:transparent">
             <button class="qty-btn" onclick="changeQty('${name}',1)">＋</button>
           </div>
           <select class="unit-select" onchange="changeUnit('${name}',this.value)" onclick="event.stopPropagation()">
@@ -2106,6 +2116,42 @@ function closeOverlay(id, event) {
   if (event.target.id === id) close1(id);
 }
 
+// ── 數量彈窗 ──────────────────────────────────────────
+let _qtyModalTarget = null;
+
+function openQtyModal(name) {
+  _qtyModalTarget = name;
+  const qty = cart[name] ? cart[name].qty : '';
+  document.getElementById('qtyModalName').textContent = name;
+  const input = document.getElementById('qtyModalInput');
+  input.value = qty || '';
+  const overlay = document.getElementById('qtyModalOverlay');
+  overlay.style.display = 'flex';
+  overlay.classList.add('open');
+  setTimeout(function() { input.focus(); input.select(); }, 50);
+}
+
+function confirmQtyModal() {
+  if (!_qtyModalTarget) return;
+  const val = document.getElementById('qtyModalInput').value;
+  setQty(_qtyModalTarget, val);
+  close1('qtyModalOverlay');
+  _qtyModalTarget = null;
+}
+
+function cancelQtyModal() {
+  close1('qtyModalOverlay');
+  _qtyModalTarget = null;
+}
+
+// Enter 確認，Escape 取消
+document.addEventListener('keydown', function(e) {
+  const overlay = document.getElementById('qtyModalOverlay');
+  if (!overlay || !overlay.classList.contains('open')) return;
+  if (e.key === 'Enter') { e.preventDefault(); confirmQtyModal(); }
+  if (e.key === 'Escape') { cancelQtyModal(); }
+});
+
 window.addEventListener('DOMContentLoaded', init);
 
 // ── iOS 鍵盤補丁：讓 --app-height 跟著可視區域縮小 ──
@@ -2143,5 +2189,18 @@ window.addEventListener('DOMContentLoaded', init);
   });
 })();
 </script>
+
+<!-- 數量輸入彈窗 -->
+<div class="modal-overlay" id="qtyModalOverlay" onclick="if(event.target===this)cancelQtyModal()">
+  <div id="qtyModalBox">
+    <div style="font-size:13px;color:#64748b;letter-spacing:2px">訂單數量</div>
+    <div id="qtyModalName"></div>
+    <input id="qtyModalInput" type="number" min="0" step="0.5" inputmode="decimal" placeholder="0">
+    <div id="qtyModalBtns">
+      <button id="qtyModalCancel" onclick="cancelQtyModal()">取消</button>
+      <button id="qtyModalConfirm" onclick="confirmQtyModal()">確認</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

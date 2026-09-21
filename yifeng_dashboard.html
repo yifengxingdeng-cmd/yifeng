@@ -462,7 +462,7 @@
 const V2_GAS_URL = 'https://script.google.com/macros/s/AKfycbz3lQIEATx7e4Cbcw0gC6o3dbCBnIpMf9Bt5U5eXEHCZzjLbBRITKnpw2veMwuepdfq3w/exec';
 // ★ 部署 Firebase 後把 YOUR_YIFENG_FIREBASE_URL 換成實際網址
 const FIREBASE_URL = 'https://yifeng-order-default-rtdb.asia-southeast1.firebasedatabase.app';
-const FRONTEND_VERSION = 'v2.20-義豐行-2026-09-21';
+const FRONTEND_VERSION = 'v2.21-義豐行-2026-09-21';
 
 function useFirebase() {
   return FIREBASE_URL && FIREBASE_URL.indexOf('YOUR_YIFENG_FIREBASE') === -1;
@@ -516,12 +516,14 @@ function loadDashboard(dateOverride) {
       .then(r => r.json())
       .then(data => {
         if (!data) { renderOrders([], date); return; }
+        // Firebase rules 未發布時 orderBy 查詢會傳回 {error:"Index not defined..."}
+        if (data.error) { fetchDashboardFromGAS(date); return; }
         const orders = Object.entries(data).map(([id, o]) => ({
           orderId: id,
           customer: o.customer || '',
           customerAlias: o.customerAlias || '',
           deliveryDate: o.deliveryDate || date,
-          items: o.items || [],
+          items: Array.isArray(o.items) ? o.items : Object.values(o.items || {}),
           status: o.status || 'pending',
           createdAt: o.createdAtStr || formatTs(o.createdAt),
           updatedAt: o.updatedAtStr || formatTs(o.updatedAt || o.createdAt),
